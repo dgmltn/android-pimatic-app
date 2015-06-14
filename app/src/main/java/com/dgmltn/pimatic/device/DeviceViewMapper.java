@@ -20,6 +20,7 @@ public class DeviceViewMapper {
 		if (matchers == null) {
 			matchers = new Matcher[] {
 				SwitchDeviceView.matcher,
+				DimmerDeviceView.matcher,
 				DefaultDeviceView.matcher
 			};
 		}

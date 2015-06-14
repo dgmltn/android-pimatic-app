@@ -65,12 +65,15 @@ public class SwitchDeviceView extends DeviceView {
 	private void init() {
 		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_switch_device, this);
 		ButterKnife.inject(v);
-	}
 
-	@Override
-	public void bind() {
-		vText.setText(device.name);
-		vSwitch.setChecked(getDeviceState());
+		// Respond to switches by emitting the desired state
+		vSwitch.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), "clicked!", Toast.LENGTH_SHORT).show();
+				pushDeviceState(vSwitch.isChecked());
+			}
+		});
 
 		// Make the entire row clickable
 		setOnClickListener(new OnClickListener() {
@@ -80,20 +83,12 @@ public class SwitchDeviceView extends DeviceView {
 
 			}
 		});
+	}
 
-		// Respond to switches by emitting the desired state
-		vSwitch.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				for (DeviceAttribute a : device.attributes) {
-					Timber.e("Attribute: " + (a == null ? "null" : a.name + " = " + a.value));
-				}
-				Toast.makeText(v.getContext(), "clicked!", Toast.LENGTH_SHORT).show();
-				String path = "/api/device/" + device.id + "/";
-				String action = vSwitch.isChecked() ? "turnOn" : "turnOff";
-				Network.rest(path + action);
-			}
-		});
+	@Override
+	public void bind() {
+		vText.setText(device.name);
+		vSwitch.setChecked(getDeviceState());
 	}
 
 	private boolean getDeviceState() {
@@ -103,5 +98,11 @@ public class SwitchDeviceView extends DeviceView {
 			}
 		}
 		return false;
+	}
+
+	private void pushDeviceState(boolean isChecked) {
+		String path = "/api/device/" + device.id + "/";
+		String action = isChecked ? "turnOn" : "turnOff";
+		Network.rest(path + action);
 	}
 }
