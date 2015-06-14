@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dgmltn.pimatic.R;
+import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
 
 import butterknife.ButterKnife;
@@ -27,6 +28,18 @@ public class DefaultDeviceView extends DeviceView {
 
 	@InjectView(R.id.attributes)
 	ViewGroup vAttributes;
+
+	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
+		@Override
+		public boolean matches(Device d) {
+			return true;
+		}
+
+		@Override
+		public DeviceView create(Context context) {
+			return new DefaultDeviceView(context);
+		}
+	};
 
 	public DefaultDeviceView(Context context) {
 		super(context);

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dgmltn.pimatic.R;
+import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
 import com.dgmltn.pimatic.util.Network;
 
@@ -27,6 +28,18 @@ public class SwitchDeviceView extends DeviceView {
 
 	@InjectView(R.id.switch_view)
 	Switch vSwitch;
+
+	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
+		@Override
+		public boolean matches(Device d) {
+			return d.template.equals("switch");
+		}
+
+		@Override
+		public DeviceView create(Context context) {
+			return new SwitchDeviceView(context);
+		}
+	};
 
 	public SwitchDeviceView(Context context) {
 		super(context);
