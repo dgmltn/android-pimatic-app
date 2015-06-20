@@ -30,6 +30,9 @@ public class Model {
 	}
 
 	public Page findPage(String id) {
+		if (pages == null) {
+			return null;
+		}
 		for (Page p : pages) {
 			if (id.equals(p.id)) {
 				return p;
