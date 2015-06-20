@@ -1,6 +1,5 @@
 package com.dgmltn.pimatic.network;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.json.JSONArray;
@@ -16,12 +15,7 @@ import com.dgmltn.pimatic.util.JSONUtils;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Credentials;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -41,12 +35,10 @@ public class Network {
 
 	public static void setup() {
 		setupWebsocket();
-		setupRest();
 	}
 
 	public static void teardown() {
 		teardownWebsocket();
-		teardownRest();
 	}
 
 	/////////////////////////////////////////////////////////////////////////
@@ -152,10 +144,6 @@ public class Network {
 	private static PimaticService sHttp;
 
 	public static PimaticService getRest() {
-		return sHttp;
-	}
-
-	private static void setupRest() {
 		if (sHttp == null) {
 			RequestInterceptor requestInterceptor = new RequestInterceptor() {
 				@Override
@@ -171,10 +159,7 @@ public class Network {
 				.build()
 				.create(PimaticService.class);
 		}
-	}
-
-	private static void teardownRest() {
-		// Nothing to do here
+		return sHttp;
 	}
 
 }

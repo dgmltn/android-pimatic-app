@@ -15,11 +15,11 @@ import com.dgmltn.pimatic.R;
  */
 public class ConnectionOptions {
 
-    public static final String ARG_PROTOCOL = "org.pimatic.connection.protocol";
-    public static final String ARG_HOST = "org.pimatic.connection.host";
-    public static final String ARG_PORT = "org.pimatic.connection.port";
-    public static final String ARG_USERNAME = "org.pimatic.connection.username";
-    public static final String ARG_PASSWORD = "org.pimatic.connection.password";
+    public static final String ARG_PROTOCOL = "com.dgmltn.pimatic.connection.protocol";
+    public static final String ARG_HOST = "com.dgmltn.pimatic.connection.host";
+    public static final String ARG_PORT = "com.dgmltn.pimatic.connection.port";
+    public static final String ARG_USERNAME = "com.dgmltn.pimatic.connection.username";
+    public static final String ARG_PASSWORD = "com.dgmltn.pimatic.connection.password";
 
     public String protocol;
     public String host;

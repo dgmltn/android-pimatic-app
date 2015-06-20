@@ -8,6 +8,7 @@ import com.dgmltn.pimatic.model.Message;
 
 import retrofit.Callback;
 import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -21,11 +22,18 @@ public interface PimaticService {
 	void getMessages(
 		Callback<List<Message>> callback);
 
+	@FormUrlEncoded
 	@POST("/login")
 	void login(
 		@Field("username") String username,
 		@Field("password") String password,
 		Callback<LoginResponse> callback);
+
+	@FormUrlEncoded
+	@POST("/login")
+	LoginResponse loginSynchronous(
+		@Field("username") String username,
+		@Field("password") String password);
 
 	@GET("/api/device/{deviceId}/{actionName}")
 	void callDeviceAction(

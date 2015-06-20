@@ -20,7 +20,6 @@ import timber.log.Timber;
 
 public class PimaticAccountAuthenticator extends AbstractAccountAuthenticator {
     private final Context mContext;
-    private String TAG = this.getClass().getSimpleName();
 
     public PimaticAccountAuthenticator(Context context) {
         super(context);
@@ -28,8 +27,15 @@ public class PimaticAccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        Timber.d(TAG, "addAccount");
+    public Bundle addAccount(
+        AccountAuthenticatorResponse response,
+        String accountType,
+        String authTokenType,
+        String[] requiredFeatures,
+        Bundle options)
+        throws NetworkErrorException {
+
+        Timber.d("addAccount");
 
         final Intent intent = new Intent(mContext, PimaticAccountAuthenticatorActivity.class);
         intent.putExtra(PimaticAccountAuthenticatorActivity.ARG_ACCOUNT_TYPE, accountType);
@@ -42,11 +48,15 @@ public class PimaticAccountAuthenticator extends AbstractAccountAuthenticator {
         return bundle;
     }
 
-	//TODO: redo this whole method
     @Override
-    public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+    public Bundle getAuthToken(
+        AccountAuthenticatorResponse response,
+        Account account,
+        String authTokenType,
+        Bundle options)
+        throws NetworkErrorException {
 
-        Timber.d(TAG, "getAuthToken: getAuthToken");
+        Timber.d("getAuthToken: getAuthToken");
 
         // Extract the username and password from the Account Manager, and ask
         // the server for an appropriate AuthToken.
@@ -54,7 +64,7 @@ public class PimaticAccountAuthenticator extends AbstractAccountAuthenticator {
 
         String authToken = am.peekAuthToken(account, authTokenType);
 
-        Timber.d(TAG, "getAuthToken: peekAuthToken returned - " + authToken);
+        Timber.d("getAuthToken: peekAuthToken returned - " + authToken);
         final String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
         ConnectionOptions conOpts = ConnectionOptions.fromAuthToken(authUrl);
 
@@ -62,20 +72,12 @@ public class PimaticAccountAuthenticator extends AbstractAccountAuthenticator {
         if (TextUtils.isEmpty(authToken)) {
             final String password = am.getPassword(account);
             if (password != null) {
-                Network.getRest().login(conOpts.username, conOpts.password, new Callback<LoginResponse>() {
-                    @Override
-                    public void success(LoginResponse loginResponse, retrofit.client.Response response) {
-                        if (loginResponse.success) {
-//                            authToken = authUrl;
-							//TODO: redo this whole method
-                        }
-                    }
+                LoginResponse loginResponse = Network.getRest()
+                    .loginSynchronous(conOpts.username, conOpts.password);
 
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
+                if (loginResponse != null && loginResponse.success) {
+                    authToken = authUrl;
+                }
             }
         }
 

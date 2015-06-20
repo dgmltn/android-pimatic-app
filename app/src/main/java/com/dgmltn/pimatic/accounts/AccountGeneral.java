@@ -7,13 +7,9 @@ public class AccountGeneral {
     /**
      * Account type id
      */
-    public static final String ACCOUNT_TYPE = "org.pimatic.app";
+    public static final String ACCOUNT_TYPE = "com.dgmltn.pimatic";
 
-    /**
-     * Account name
-     */
-    public static final String ACCOUNT_NAME = "pimatic";
-    public static final String AUTHTOKEN_TYPE_CONNECTION_URL = "org.pimatic.auth.url";
-    public static final String ACCOUNT_USER_DATA_URL = "org.pimatic.auth.url";
+    public static final String AUTHTOKEN_TYPE_CONNECTION_URL = "com.dgmltn.pimatic.auth.url";
+    public static final String ACCOUNT_USER_DATA_URL = "com.dgmltn.pimatic.data.url";
 
 }
