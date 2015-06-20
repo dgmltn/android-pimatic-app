@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountPreferences="@xml/accountprefs"
+    android:accountType="com.dgmltn.pimatic"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/account_manager_label"
+    android:smallIcon="@mipmap/ic_launcher" />

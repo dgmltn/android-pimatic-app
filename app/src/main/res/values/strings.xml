@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Pimatic</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="account_manager_label">Pimatic</string>
     <string name="action_settings">Settings</string>
 </resources>
