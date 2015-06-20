@@ -1,4 +1,4 @@
-package com.dgmltn.pimatic.util;
+package com.dgmltn.pimatic.network;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,6 +11,8 @@ import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
+import com.dgmltn.pimatic.util.Events;
+import com.dgmltn.pimatic.util.JSONUtils;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -21,6 +23,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
 import timber.log.Timber;
 
 public class Network {
@@ -145,11 +149,27 @@ public class Network {
 	// REST
 	/////////////////////////////////////////////////////////////////////////
 
-	private static OkHttpClient sHttp;
+	private static PimaticService sHttp;
+
+	public static PimaticService getRest() {
+		return sHttp;
+	}
 
 	private static void setupRest() {
 		if (sHttp == null) {
-			sHttp = new OkHttpClient();
+			RequestInterceptor requestInterceptor = new RequestInterceptor() {
+				@Override
+				public void intercept(RequestFacade request) {
+					String credential = Credentials.basic(USERNAME, PASSWORD);
+					request.addHeader("Authorization", credential);
+				}
+			};
+
+			sHttp = new RestAdapter.Builder()
+				.setEndpoint("http://" + SERVER + ":" + PORT)
+				.setRequestInterceptor(requestInterceptor)
+				.build()
+				.create(PimaticService.class);
 		}
 	}
 
@@ -157,39 +177,4 @@ public class Network {
 		// Nothing to do here
 	}
 
-	public static void rest(String path) {
-		String credential = Credentials.basic(USERNAME, PASSWORD);
-		Request request = new Request.Builder()
-			.url("http://" + SERVER + ":" + PORT + path)
-			.header("Authorization", credential)
-			.build();
-
-		sHttp.newCall(request).enqueue(new Callback() {
-			@Override
-			public void onFailure(Request request, IOException e) {
-				e.printStackTrace();
-			}
-
-			@Override
-			public void onResponse(Response response) throws IOException {
-				if (!response.isSuccessful()) {
-					throw new IOException("Unexpected code " + response);
-				}
-
-				Headers responseHeaders = response.headers();
-				for (int i = 0; i < responseHeaders.size(); i++) {
-					System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-				}
-
-				System.out.println(response.body().string());
-
-				// TODO: better response handling
-				// example response:
-				// {
-				// "result": true,
-				// "success": true
-				// }
-			}
-		});
-	}
 }

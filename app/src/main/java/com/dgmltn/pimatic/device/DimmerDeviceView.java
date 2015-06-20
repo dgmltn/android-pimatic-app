@@ -10,12 +10,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dgmltn.pimatic.R;
+import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
-import com.dgmltn.pimatic.util.Network;
+import com.dgmltn.pimatic.network.Network;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by doug on 6/7/15.
@@ -101,9 +105,18 @@ public class DimmerDeviceView extends DeviceView {
 	}
 
 	private void pushDimlevel(int to) {
-		// /api/device/my-device-id/changeDimlevelTo?dimlevel=15
-		String path = "/api/device/" + device.id + "/";
 		String action = "changeDimlevelTo?dimlevel=" + to;
-		Network.rest(path + action);
+		Network.getRest().callDeviceAction(device.id, action, new Callback<ActionResponse>() {
+			@Override
+			public void success(ActionResponse actionResponse, Response response) {
+				//TODO
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				//TODO
+			}
+		});
+
 	}
 }

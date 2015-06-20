@@ -22,7 +22,7 @@ import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
 import com.dgmltn.pimatic.util.Events;
-import com.dgmltn.pimatic.util.Network;
+import com.dgmltn.pimatic.network.Network;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;

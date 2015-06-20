@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_protocol">http</string>
+    <string name="default_host">demo.pimatic.org</string>
+    <integer name="default_port">80</integer>
+    <string name="default_username">demo</string>
+    <string name="default_password">demo</string>
+</resources>
