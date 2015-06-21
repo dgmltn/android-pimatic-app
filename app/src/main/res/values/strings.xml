@@ -2,4 +2,13 @@
     <string name="app_name">Pimatic</string>
     <string name="account_manager_label">Pimatic</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Navigation items -->
+    <string name="Add_Account">Add Account</string>
+    <string name="Manage_Accounts">Manage Accounts</string>
+    <string name="Rules">Rules</string>
+    <string name="Variables">Variables</string>
+    <string name="Messages">Messages</string>
+    <string name="Events">Events</string>
+    <string name="Connections">Connections</string>
 </resources>

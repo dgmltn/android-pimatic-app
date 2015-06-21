@@ -22,27 +22,32 @@
     <item android:title="Automation" android:orderInCategory="100">
         <menu>
             <item
+                android:id="@+id/rules"
                 android:icon="@drawable/ic_rules"
-                android:title="Rules" />
+                android:title="@string/Rules" />
             <item
+                android:id="@+id/variables"
                 android:icon="@drawable/ic_variables"
-                android:title="Variables" />
+                android:title="@string/Variables" />
         </menu>
     </item>
 
     <item android:title="Log" android:orderInCategory="200">
         <menu>
             <item
+                android:id="@+id/messages"
                 android:icon="@drawable/ic_forum"
-                android:title="Messages" />
+                android:title="@string/Messages" />
             <item
+                android:id="@+id/events"
                 android:icon="@drawable/ic_event"
-                android:title="Events" />
+                android:title="@string/Events" />
         </menu>
     </item>
 
     <item android:orderInCategory="300"
+        android:id="@+id/connections"
         android:icon="@drawable/ic_settings"
-        android:title="Connections" />
+        android:title="@string/Connections" />
 
 </menu>
