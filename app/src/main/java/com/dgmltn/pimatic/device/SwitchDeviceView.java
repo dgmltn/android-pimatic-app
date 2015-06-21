@@ -105,7 +105,7 @@ public class SwitchDeviceView extends DeviceView {
 
 	private void pushDeviceState(boolean isChecked) {
 		String action = isChecked ? "turnOn" : "turnOff";
-		Network.getRest().callDeviceAction(device.id, action, new Callback<ActionResponse>() {
+		Network.getRest().deviceAction(device.id, action, new Callback<ActionResponse>() {
 			@Override
 			public void success(ActionResponse actionResponse, Response response) {
 				//TODO

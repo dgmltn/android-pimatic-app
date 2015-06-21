@@ -20,6 +20,7 @@ import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by doug on 6/7/15.
@@ -105,8 +106,7 @@ public class DimmerDeviceView extends DeviceView {
 	}
 
 	private void pushDimlevel(int to) {
-		String action = "changeDimlevelTo?dimlevel=" + to;
-		Network.getRest().callDeviceAction(device.id, action, new Callback<ActionResponse>() {
+		Network.getRest().changeDimlevelTo(device.id, to, new Callback<ActionResponse>() {
 			@Override
 			public void success(ActionResponse actionResponse, Response response) {
 				//TODO
@@ -115,6 +115,7 @@ public class DimmerDeviceView extends DeviceView {
 			@Override
 			public void failure(RetrofitError error) {
 				//TODO
+				Timber.e(error.toString());
 			}
 		});
 
