@@ -46,6 +46,16 @@ public class ConnectionOptions {
         }
     }
 
+    public static ConnectionOptions fromDemo(Resources res) {
+        ConnectionOptions conOpts = new ConnectionOptions();
+        conOpts.protocol = res.getString(R.string.default_protocol);
+        conOpts.host = res.getString(R.string.default_host);
+        conOpts.port = res.getInteger(R.integer.default_port);
+        conOpts.username = res.getString(R.string.default_username);
+        conOpts.password = res.getString(R.string.default_password);
+        return conOpts;
+    }
+
     public static ConnectionOptions fromSettings(Resources res, SharedPreferences settings) {
         ConnectionOptions conOpts = new ConnectionOptions();
         conOpts.protocol = settings.getString("protocol", res.getString(R.string.default_protocol));

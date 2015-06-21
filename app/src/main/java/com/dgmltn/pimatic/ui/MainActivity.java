@@ -74,17 +74,28 @@ public class MainActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 		Events.register(this);
+		setupNetwork();
+	}
 
+	private void setupNetwork() {
 		// This just always chooses the first account
 		// TODO: store the chosen account in settings
 		AccountManager am = AccountManager.get(this);
+
+		ConnectionOptions conOpts = null;
+
 		for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
-			final String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
-			ConnectionOptions conOpts = ConnectionOptions.fromAuthToken(authUrl);
-			Model.getInstance().configureNetwork(conOpts);
+			String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
+			conOpts = ConnectionOptions.fromAuthToken(authUrl);
 			break;
 		}
 
+		if (conOpts == null) {
+			// Use the demo ConnectionOptions by default
+			conOpts = ConnectionOptions.fromDemo(getResources());
+		}
+
+		Model.getInstance().configureNetwork(conOpts);
 	}
 
 	@Override
