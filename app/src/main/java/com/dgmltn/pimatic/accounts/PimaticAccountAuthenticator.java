@@ -72,7 +72,7 @@ public class PimaticAccountAuthenticator extends AbstractAccountAuthenticator {
         if (TextUtils.isEmpty(authToken)) {
             final String password = am.getPassword(account);
             if (password != null) {
-                LoginResponse loginResponse = Network.getRest()
+                LoginResponse loginResponse = Network.generateRestService(conOpts)
                     .loginSynchronous(conOpts.username, conOpts.password);
 
                 if (loginResponse != null && loginResponse.success) {

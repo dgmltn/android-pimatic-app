@@ -114,9 +114,19 @@ public class Events {
 
 	// Events
 
+	public static final class AccountsChanged {
+	}
+
 	public static final class DevicesChanged {
 	}
 
 	public static final class PagesChanged {
+	}
+
+	public static final class DesiredGroupTab {
+		public int tab;
+		public DesiredGroupTab(int tab) {
+			this.tab = tab;
+		}
 	}
 }

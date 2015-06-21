@@ -3,8 +3,9 @@ package com.dgmltn.pimatic.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,15 +20,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dgmltn.pimatic.R;
+import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
-import com.dgmltn.pimatic.util.Events;
+import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.network.Network;
+import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
 	@InjectView(R.id.viewpager)
 	ViewPager vPager;
-
-	@InjectView(R.id.nav_view)
-	NavigationView vNavigation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +74,23 @@ public class MainActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 		Events.register(this);
-		Network.setup();
+
+		// This just always chooses the first account
+		// TODO: store the chosen account in settings
+		AccountManager am = AccountManager.get(this);
+		for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
+			final String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
+			ConnectionOptions conOpts = ConnectionOptions.fromAuthToken(authUrl);
+			Model.getInstance().configureNetwork(conOpts);
+			break;
+		}
+
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Network.teardown();
+		Model.getInstance().deconfigureNetwork();
 		Events.unregister(this);
 	}
 
@@ -95,24 +104,20 @@ public class MainActivity extends AppCompatActivity {
 		setupViewPager();
 	}
 
+	@Subscribe
+	public void otto(Events.DesiredGroupTab e) {
+		vDrawerLayout.closeDrawers();
+		vPager.setCurrentItem(e.tab, true);
+	}
+
 	private void setupViewPager() {
 		Model model = Model.getInstance();
 
 		Adapter adapter = new Adapter(getSupportFragmentManager());
 		if (model.pages != null && model.devices != null) {
-			int i = 1;
 			for (Page p : model.pages) {
 				if (p != null) {
 					adapter.addFragment(p);
-					Timber.i("page: " + p.id + ": " + p.name);
-					MenuItem existingItem = vNavigation.getMenu().findItem(i);
-					if (existingItem == null) {
-						vNavigation.getMenu().add(R.id.groups, i, i, p.name);
-					}
-					else {
-						existingItem.setTitle(p.name);
-					}
-					i++;
 				}
 			}
 		}
@@ -121,10 +126,6 @@ public class MainActivity extends AppCompatActivity {
 		vTabLayout.removeAllTabs();
 		vTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 		vTabLayout.setupWithViewPager(vPager);
-
-//		vNavigation.getMenu().add(R.id.groups, Menu.NONE, Menu.NONE, );
-//		MenuItem groupsItem = vNavigation.getMenu().findItem(R.id.groups);
-
 	}
 
 	static class Adapter extends FragmentPagerAdapter {

@@ -13,6 +13,7 @@ import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
+import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.network.Network;
 
 import butterknife.ButterKnife;
@@ -106,7 +107,8 @@ public class DimmerDeviceView extends DeviceView {
 	}
 
 	private void pushDimlevel(int to) {
-		Network.getRest().changeDimlevelTo(device.id, to, new Callback<ActionResponse>() {
+		Model.getInstance().getNetwork().getRest()
+			.changeDimlevelTo(device.id, to, new Callback<ActionResponse>() {
 			@Override
 			public void success(ActionResponse actionResponse, Response response) {
 				//TODO

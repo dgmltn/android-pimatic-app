@@ -54,7 +54,7 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.v("login onCreate");
+        Timber.v("onCreate");
         setContentView(R.layout.account_settings);
 		ButterKnife.inject(this);
 		
@@ -99,10 +99,11 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
 		else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
+
     }
 
     public void submit() {
-		Timber.v("login submit()");
+		Timber.v("submit()");
         final ConnectionOptions conOpts = new ConnectionOptions();
         conOpts.protocol = vProtocol.getSelectedItem().toString();
         conOpts.host = vHost.getText().toString();
@@ -110,7 +111,8 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
         conOpts.username = vUsername.getText().toString();
         conOpts.password = vPassword.getText().toString();
 
-        Network.getRest().login(conOpts.username, conOpts.password, new Callback<LoginResponse>() {
+		Network.generateRestService(conOpts)
+        	.login(conOpts.username, conOpts.password, new Callback<LoginResponse>() {
             @Override
             public void success(LoginResponse loginResponse, Response response) {
                 Timber.v("login success: " + loginResponse.toString());
@@ -141,6 +143,7 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
             mAccountManager.setPassword(account, conOps.password);
         }
         mAccountManager.setUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL, authToken);
+
         mAccountManager.setAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_CONNECTION_URL, authToken);
 
         setAccountAuthenticatorResult(intent.getExtras());

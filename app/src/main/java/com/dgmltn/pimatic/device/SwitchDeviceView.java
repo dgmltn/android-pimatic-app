@@ -13,6 +13,7 @@ import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
+import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.network.Network;
 
 import butterknife.ButterKnife;
@@ -105,7 +106,8 @@ public class SwitchDeviceView extends DeviceView {
 
 	private void pushDeviceState(boolean isChecked) {
 		String action = isChecked ? "turnOn" : "turnOff";
-		Network.getRest().deviceAction(device.id, action, new Callback<ActionResponse>() {
+		Model.getInstance().getNetwork().getRest()
+			.deviceAction(device.id, action, new Callback<ActionResponse>() {
 			@Override
 			public void success(ActionResponse actionResponse, Response response) {
 				//TODO

@@ -1,5 +1,8 @@
 package com.dgmltn.pimatic.model;
 
+import com.dgmltn.pimatic.network.ConnectionOptions;
+import com.dgmltn.pimatic.network.Network;
+
 /**
  * Created by doug on 6/2/15.
  */
@@ -16,6 +19,41 @@ public class Model {
 
 	public static Model getInstance() {
 		return sInstance;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Handle changing the network connection carefully
+	///////////////////////////////////////////////////////////////////////////
+
+	private ConnectionOptions connection;
+	private Network network;
+
+	public void configureNetwork(ConnectionOptions connection) {
+		if (this.connection == null || !this.connection.toString().equals(connection.toString())) {
+			groups = null;
+			pages = null;
+			devices = null;
+			this.connection = connection;
+			if (network != null) {
+				network.teardown();
+			}
+			network = new Network(connection);
+		}
+	}
+
+	public void deconfigureNetwork() {
+		if (network != null) {
+			network.teardown();
+			network = null;
+		}
+	}
+
+	public Network getNetwork() {
+		return network;
+	}
+
+	public ConnectionOptions getConnection() {
+		return connection;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
