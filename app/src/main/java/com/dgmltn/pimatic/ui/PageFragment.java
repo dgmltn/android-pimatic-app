@@ -98,8 +98,8 @@ public class PageFragment extends Fragment {
 		}
 
 		// Adding the ungrouped devices
+		boolean addedGroup = false;
 		for (DeviceId deviceId : mPage.devices) {
-			boolean addedGroup = false;
 			if (presentDevices.contains(deviceId.deviceId)) {
 				if (!addedGroup) {
 					mAdapter.addGroup("Ungrouped");

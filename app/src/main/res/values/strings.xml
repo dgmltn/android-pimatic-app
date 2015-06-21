@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Pimatic</string>
     <string name="account_manager_label">Pimatic</string>
+
+    <!-- Overflow menu items -->
     <string name="action_settings">Settings</string>
 
     <!-- Navigation items -->
@@ -11,4 +13,7 @@
     <string name="Messages">Messages</string>
     <string name="Events">Events</string>
     <string name="Connections">Connections</string>
+
+    <!-- Name for group of devices with no specific group -->
+    <string name="Ungrouped">Ungrouped</string>
 </resources>
