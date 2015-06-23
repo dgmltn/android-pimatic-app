@@ -5,19 +5,24 @@ import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.accounts.AccountGeneral;
@@ -30,6 +35,7 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -111,6 +117,11 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@Subscribe
+	public void otto(Events.AccountsChanged e) {
+		setupNetwork();
+	}
+
+	@Subscribe
 	public void otto(Events.PagesChanged e) {
 		setupViewPager();
 	}
@@ -124,47 +135,80 @@ public class MainActivity extends AppCompatActivity {
 	private void setupViewPager() {
 		Model model = Model.getInstance();
 
-		Adapter adapter = new Adapter(getSupportFragmentManager());
+		GroupPagerAdapter adapter = (GroupPagerAdapter) vPager.getAdapter();
+		if (adapter == null) {
+			adapter = new GroupPagerAdapter();
+			vPager.setAdapter(adapter);
+			vTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+		}
+
+		adapter.clear();
 		if (model.pages != null && model.devices != null) {
 			for (Page p : model.pages) {
 				if (p != null) {
-					adapter.addFragment(p);
+					adapter.add(p);
 				}
 			}
 		}
-		vPager.setAdapter(adapter);
 
-		vTabLayout.removeAllTabs();
-		vTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 		vTabLayout.setupWithViewPager(vPager);
 	}
 
-	static class Adapter extends FragmentPagerAdapter {
-		private final List<Fragment> mFragments = new ArrayList<>();
-		private final List<String> mFragmentTitles = new ArrayList<>();
-
-		public Adapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		public void addFragment(Page p) {
-			mFragments.add(PageFragment.getInstance(p));
-			mFragmentTitles.add(p.name);
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			return mFragments.get(position);
-		}
+	static class GroupPagerAdapter extends PagerAdapter {
+		private final List<Page> mPages = new ArrayList<>();
+		private final List<PageView> mViews = new ArrayList<>();
 
 		@Override
 		public int getCount() {
-			return mFragments.size();
+			return mPages.size();
+		}
+
+		public void clear() {
+			mPages.clear();
+			mViews.clear();
+			notifyDataSetChanged();
+		}
+
+		public void add(Page p) {
+			mPages.add(p);
+			mViews.add(null);
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			Page p = mPages.get(position);
+			PageView view = mViews.get(position);
+			if (view == null) {
+				view = (PageView) LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_page, container, false);
+				view.setPage(Model.getInstance(), p);
+				mViews.set(position, view);
+			}
+			container.addView(view, 0);
+			return p;
+		}
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			for (int i = 0; i < container.getChildCount(); i++) {
+				if (isViewFromObject(container.getChildAt(i), object)) {
+					container.removeViewAt(i);
+					break;
+				}
+			}
+		}
+
+		@Override
+		public boolean isViewFromObject(View view, Object object) {
+			boolean is = object == null || view == null
+				? false
+				: ((Page)object).id.equals(((PageView)view).getPage().id);
+			return is;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return mFragmentTitles.get(position);
+			return mPages.get(position).name;
 		}
 	}
 

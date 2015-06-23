@@ -10,11 +10,9 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -23,7 +21,6 @@ import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
-import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
@@ -66,6 +63,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 
 	private void init(Context context) {
 		setNavigationItemSelectedListener(this);
+		setClickable(true);
 	}
 
 	@Override
@@ -103,9 +101,9 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		}
 		else if (menuItem.getItemId() == R.id.manage_accounts) {
 			Timber.e("navigation: manage accounts!");
-			String[] authorities = {AccountGeneral.ACCOUNT_TYPE};
 			Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
-			intent.putExtra(Settings.EXTRA_AUTHORITIES, authorities);
+			//String[] authorities = {AccountGeneral.ACCOUNT_TYPE};
+			//intent.putExtra(Settings.EXTRA_AUTHORITIES, authorities);
 			getContext().startActivity(intent);
 			return true;
 		}
@@ -142,8 +140,8 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		bind();
 	}
 
-	@OnClick(R.id.username)
-	public void usernameOnClick() {
+	@OnClick(R.id.nav_header)
+	public void headerOnClick() {
 		isDisplayingAccounts = !isDisplayingAccounts;
 		bind();
 	}
@@ -217,7 +215,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 					e.printStackTrace();
 				}
 
-				Events.post(new Events.DevicesChanged());
+				Events.post(new Events.AccountsChanged());
 			}
 		}, null);
 	}

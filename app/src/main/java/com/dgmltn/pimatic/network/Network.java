@@ -114,6 +114,9 @@ public class Network {
 		socket.off("pages");
 		socket.off("groups");
 		socket.off("deviceAttributeChanged");
+
+		socket.disconnect();
+		socket = null;
 	}
 
 	public void emit(String s) {
