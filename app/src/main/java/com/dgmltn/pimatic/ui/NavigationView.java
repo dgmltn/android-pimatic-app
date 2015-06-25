@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
+import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
@@ -84,14 +87,32 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		super.onDetachedFromWindow();
 	}
 
+	public void closeDrawer() {
+		isDisplayingAccounts = false;
+		DrawerLayout drawerLayout = (DrawerLayout) getParent();
+		drawerLayout.closeDrawer(GravityCompat.START);
+	}
+
 	@Override
 	public boolean onNavigationItemSelected(MenuItem menuItem) {
 		if (menuItem.getGroupId() == R.id.accounts) {
-			Timber.e("navigation: accounts!");
+			Timber.e("navigation: accounts! " + menuItem.getTitle());
+			AccountManager am = AccountManager.get(getContext());
+			for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
+				if (account.name.equals(menuItem.getTitle())) {
+					ConnectionOptions conOpts = ConnectionOptions.fromAccount(am, account);
+					ConnectionOptions.toSettings(conOpts, getContext());
+					Model.getInstance().configureNetwork(conOpts);
+					Events.post(new Events.AccountsChanged());
+					closeDrawer();
+					break;
+				}
+			}
 		}
 		else if (menuItem.getGroupId() == R.id.groups) {
 			Timber.e("navigation: group # " + menuItem.getItemId());
 			Events.post(new Events.DesiredGroupTab(menuItem.getItemId() - GROUP_START_ID));
+			closeDrawer();
 			return true;
 		}
 		else if (menuItem.getItemId() == R.id.add_account) {

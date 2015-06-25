@@ -12,6 +12,8 @@ import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
 
+import timber.log.Timber;
+
 /**
  * Displays a list of Device that are associated with a given Page. This is a RecyclerView
  */
@@ -45,6 +47,7 @@ public class PageView extends RecyclerView {
 	public void setPage(Model model, Page page) {
 		mModel = model;
 		mPage = page;
+		mAdapter.clear();
 		bind();
 	}
 
@@ -53,6 +56,11 @@ public class PageView extends RecyclerView {
 	}
 
 	private void bind() {
+		if (mPage == null || mModel == null) {
+			Timber.e("cannot bind()");
+			return;
+		}
+
 		// A truth table of what devices should be listed on this page
 		HashSet<String> presentDevices = new HashSet<>();
 		for (DeviceId did : mPage.devices) {

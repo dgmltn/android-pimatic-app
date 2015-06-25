@@ -5,12 +5,8 @@ import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -29,13 +25,11 @@ import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
 import com.dgmltn.pimatic.network.ConnectionOptions;
-import com.dgmltn.pimatic.network.Network;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,6 +71,16 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@Override
+	public void onBackPressed() {
+		if (vDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+			vDrawerLayout.closeDrawer(GravityCompat.START);
+		}
+		else {
+			super.onBackPressed();
+		}
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		Events.register(this);
@@ -84,21 +88,43 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void setupNetwork() {
-		// This just always chooses the first account
-		// TODO: store the chosen account in settings
+		// See if they've saved a connection in settings
+		ConnectionOptions conOpts = ConnectionOptions.fromSettings(this);
+
 		AccountManager am = AccountManager.get(this);
 
-		ConnectionOptions conOpts = null;
+		// Verify that the connection stored in settings still exists in the AccountManager
+		if (conOpts != null) {
+			String authToken = conOpts.toAuthToken();
+			boolean match = false;
+			for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
+				String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
+				if (authUrl.equals(authToken)) {
+					match = true;
+					break;
+				}
+			}
 
-		for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
-			String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
-			conOpts = ConnectionOptions.fromAuthToken(authUrl);
-			break;
+			// A connection was found in preferences, but it doesn't match
+			// any existing Account. So, don't use it, and erase it from preferences
+			if (!match) {
+				conOpts = null;
+				ConnectionOptions.eraseSettings(this);
+			}
 		}
 
+		// No existing connection was found, just use the first account
 		if (conOpts == null) {
-			// Use the demo ConnectionOptions by default
-			conOpts = ConnectionOptions.fromDemo(getResources());
+			for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
+				String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
+				conOpts = ConnectionOptions.fromAuthToken(authUrl);
+				break;
+			}
+		}
+
+		// All else failed, use the demo ConnectionOptions by default
+		if (conOpts == null) {
+			conOpts = ConnectionOptions.fromDemo(this);
 		}
 
 		Model.getInstance().configureNetwork(conOpts);
@@ -140,9 +166,12 @@ public class MainActivity extends AppCompatActivity {
 			adapter = new GroupPagerAdapter();
 			vPager.setAdapter(adapter);
 			vTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+			vTabLayout.setupWithViewPager(vPager);
 		}
-
-		adapter.clear();
+		else {
+			adapter.clear();
+			vPager.setAdapter(adapter);
+		}
 		if (model.pages != null && model.devices != null) {
 			for (Page p : model.pages) {
 				if (p != null) {
@@ -150,8 +179,7 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		}
-
-		vTabLayout.setupWithViewPager(vPager);
+		vTabLayout.setTabsFromPagerAdapter(adapter);
 	}
 
 	static class GroupPagerAdapter extends PagerAdapter {
@@ -180,7 +208,9 @@ public class MainActivity extends AppCompatActivity {
 			Page p = mPages.get(position);
 			PageView view = mViews.get(position);
 			if (view == null) {
-				view = (PageView) LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_page, container, false);
+				view = (PageView) LayoutInflater
+					.from(container.getContext())
+					.inflate(R.layout.fragment_page, container, false);
 				view.setPage(Model.getInstance(), p);
 				mViews.set(position, view);
 			}
@@ -202,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 		public boolean isViewFromObject(View view, Object object) {
 			boolean is = object == null || view == null
 				? false
-				: ((Page)object).id.equals(((PageView)view).getPage().id);
+				: ((Page) object).id.equals(((PageView) view).getPage().id);
 			return is;
 		}
 

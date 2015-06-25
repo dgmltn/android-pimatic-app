@@ -2,7 +2,6 @@ package com.dgmltn.pimatic.model;
 
 import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.network.Network;
-import com.dgmltn.pimatic.util.Events;
 
 /**
  * Created by doug on 6/2/15.
@@ -30,7 +29,7 @@ public class Model {
 	private Network network;
 
 	public void configureNetwork(ConnectionOptions connection) {
-		if (this.connection == null || !this.connection.toString().equals(connection.toString())) {
+		if (connection != null && !connection.equals(this.connection)) {
 			groups = null;
 			pages = null;
 			devices = null;
@@ -40,8 +39,6 @@ public class Model {
 			}
 			network = new Network(connection);
 		}
-		Events.post(new Events.PagesChanged());
-		Events.post(new Events.DevicesChanged());
 	}
 
 	public void deconfigureNetwork() {

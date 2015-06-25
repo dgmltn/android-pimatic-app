@@ -3,12 +3,17 @@ package com.dgmltn.pimatic.network;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.dgmltn.pimatic.R;
+import com.dgmltn.pimatic.accounts.AccountGeneral;
 
 /**
  * Created by Oliver Schneider <oliverschneider89+sweetpi@gmail.com>
@@ -46,8 +51,14 @@ public class ConnectionOptions {
         }
     }
 
-    public static ConnectionOptions fromDemo(Resources res) {
+    public static ConnectionOptions fromAccount(AccountManager am, Account account) {
+        final String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
+        return ConnectionOptions.fromAuthToken(authUrl);
+    }
+
+    public static ConnectionOptions fromDemo(Context context) {
         ConnectionOptions conOpts = new ConnectionOptions();
+        Resources res = context.getResources();
         conOpts.protocol = res.getString(R.string.default_protocol);
         conOpts.host = res.getString(R.string.default_host);
         conOpts.port = res.getInteger(R.integer.default_port);
@@ -56,14 +67,53 @@ public class ConnectionOptions {
         return conOpts;
     }
 
-    public static ConnectionOptions fromSettings(Resources res, SharedPreferences settings) {
+    public static ConnectionOptions fromSettings(Context context) {
+        SharedPreferences settings = PreferenceManager
+            .getDefaultSharedPreferences(context.getApplicationContext());
+        if (!settings.contains("host")) {
+            return null;
+        }
         ConnectionOptions conOpts = new ConnectionOptions();
-        conOpts.protocol = settings.getString("protocol", res.getString(R.string.default_protocol));
-        conOpts.host = settings.getString("host", res.getString(R.string.default_host));
-        conOpts.port = settings.getInt("port", res.getInteger(R.integer.default_port));
-        conOpts.username = settings.getString("username", res.getString(R.string.default_username));
-        conOpts.password = settings.getString("password", res.getString(R.string.default_password));
+        conOpts.protocol = settings.getString("protocol", "");
+        conOpts.host = settings.getString("host", "");
+        conOpts.port = settings.getInt("port", 0);
+        conOpts.username = settings.getString("username", "");
+        conOpts.password = settings.getString("password", "");
         return conOpts;
+    }
+
+    /**
+     * Store this ConnectionOptions object into SharedPreferences
+     *
+     * @param conOpts
+     * @param context
+     */
+    public static void toSettings(ConnectionOptions conOpts, Context context) {
+        SharedPreferences settings = PreferenceManager
+            .getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("protocol", conOpts.protocol);
+        editor.putString("host", conOpts.host);
+        editor.putInt("port", conOpts.port);
+        editor.putString("username", conOpts.username);
+        editor.putString("password", conOpts.password);
+        editor.commit();
+    }
+
+    /**
+     * Clear out any previously saved ConnectionsOptions object from SharedPreferences
+     * @param context
+     */
+    public static void eraseSettings(Context context) {
+        SharedPreferences settings = PreferenceManager
+            .getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove("protocol");
+        editor.remove("host");
+        editor.remove("port");
+        editor.remove("username");
+        editor.remove("password");
+        editor.commit();
     }
 
     public static ConnectionOptions fromIntent(Intent intent) {
@@ -132,6 +182,11 @@ public class ConnectionOptions {
         builder.append(", password: ").append(password);
         return builder.toString();
     }
+
+	@Override
+	public boolean equals(Object o) {
+		return o == null ? false : toString().equals(o.toString());
+	}
 }
 
 
