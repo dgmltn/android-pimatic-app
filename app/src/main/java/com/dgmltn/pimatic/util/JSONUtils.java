@@ -41,7 +41,7 @@ public class JSONUtils {
 				}
 			}
 			catch (Exception e) {
-				Timber.e("Could not convert JSONObject to FromJson of type \"" + c + "\".", e);
+				Timber.e("Could not convert JSONObject to FromJson of type \"" + c + "\": " + e);
 			}
 		}
 

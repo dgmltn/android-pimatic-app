@@ -25,9 +25,14 @@ public class DeviceAction implements FromJson {
 			int i = 0;
 			while (iterator.hasNext()) {
 				String paramName = iterator.next();
-				DeviceActionParam p = new DeviceActionParam(paramName);
-				p.from(object.optJSONObject(paramName));
-				params[i++] = p;
+				if (paramName != null) {
+					JSONObject paramObject = object.optJSONObject(paramName);
+					if (paramObject != null) {
+						DeviceActionParam p = new DeviceActionParam(paramName);
+						p.from(paramObject);
+						params[i++] = p;
+					}
+				}
 			}
 		}
 
