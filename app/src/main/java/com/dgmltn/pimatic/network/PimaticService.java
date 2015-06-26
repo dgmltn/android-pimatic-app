@@ -62,4 +62,11 @@ public interface PimaticService {
 		@Query("dimlevel") int dimlevel,
 		Callback<ActionResponse> callback
 	);
+
+	@GET("/api/device/{deviceId}/buttonPressed")
+	void buttonPressed(
+		@Path("deviceId") String deviceId,
+		@Query("buttonId") String buttonId,
+		Callback<ActionResponse> callback
+	);
 }
