@@ -21,6 +21,7 @@ public class DeviceViewMapper {
 			matchers = new Matcher[] {
 				SwitchDeviceView.matcher,
 				DimmerDeviceView.matcher,
+				PresenceDeviceView.matcher,
 				DefaultDeviceView.matcher
 			};
 		}
