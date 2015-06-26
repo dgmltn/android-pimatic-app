@@ -191,9 +191,9 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		else {
 			inflateMenu(R.menu.drawer_view);
 			Model model = Model.getInstance();
-			if (model.pages != null && model.devices != null) {
+			if (model.getPages() != null && model.getDevices() != null) {
 				int i = GROUP_START_ID;
-				for (Page p : model.pages) {
+				for (Page p : model.getPages()) {
 					if (p != null) {
 						Timber.i("page: " + p.id + ": " + p.name);
 						MenuItem existingItem = menu.findItem(i);

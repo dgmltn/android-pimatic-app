@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
 			adapter.clear();
 			vPager.setAdapter(adapter);
 		}
-		if (model.pages != null && model.devices != null) {
-			for (Page p : model.pages) {
+		if (model.getPages() != null && model.getDevices() != null) {
+			for (Page p : model.getPages()) {
 				if (p != null) {
 					adapter.add(p);
 				}

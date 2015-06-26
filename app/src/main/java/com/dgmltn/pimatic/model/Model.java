@@ -2,15 +2,13 @@ package com.dgmltn.pimatic.model;
 
 import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.network.Network;
+import com.dgmltn.pimatic.util.Events;
 
 /**
  * Created by doug on 6/2/15.
  */
 public class Model {
-	public Group[] groups;
-	public Page[] pages;
-	public Device[] devices;
-	//public Variable[] variables;
+	//TODO: public Variable[] variables;
 
 	private static Model sInstance = new Model();
 
@@ -22,7 +20,7 @@ public class Model {
 	}
 
 	///////////////////////////////////////////////////////////////////////////
-	// Handle changing the network connection carefully
+	// Network and ConnectionOptions
 	///////////////////////////////////////////////////////////////////////////
 
 	private ConnectionOptions connection;
@@ -57,14 +55,32 @@ public class Model {
 	}
 
 	///////////////////////////////////////////////////////////////////////////
+	// Groups
+	///////////////////////////////////////////////////////////////////////////
 
-	public Device findDevice(String id) {
-		for (Device d : devices) {
-			if (id.equals(d.id)) {
-				return d;
-			}
-		}
-		return null;
+	private Group[] groups;
+
+	public void setGroups(Group[] groups) {
+		this.groups = groups;
+	}
+
+	public Group[] getGroups() {
+		return groups;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Pages
+	///////////////////////////////////////////////////////////////////////////
+
+	private Page[] pages;
+
+	public void setPages(Page[] pages) {
+		this.pages = pages;
+		Events.post(new Events.PagesChanged());
+	}
+
+	public Page[] getPages() {
+		return pages;
 	}
 
 	public Page findPage(String id) {
@@ -74,6 +90,30 @@ public class Model {
 		for (Page p : pages) {
 			if (id.equals(p.id)) {
 				return p;
+			}
+		}
+		return null;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Devices
+	///////////////////////////////////////////////////////////////////////////
+
+	private Device[] devices;
+
+	public void setDevices(Device[] devices) {
+		this.devices = devices;
+		Events.post(new Events.DevicesChanged());
+	}
+
+	public Device[] getDevices() {
+		return devices;
+	}
+
+	public Device findDevice(String id) {
+		for (Device d : devices) {
+			if (id.equals(d.id)) {
+				return d;
 			}
 		}
 		return null;

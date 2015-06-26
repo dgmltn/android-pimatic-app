@@ -10,7 +10,6 @@ import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
-import com.dgmltn.pimatic.util.Events;
 import com.dgmltn.pimatic.util.JSONUtils;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -54,9 +53,8 @@ public class Network {
 		socket.on("devices", new Emitter.Listener() {
 			@Override
 			public void call(Object... args) {
-				Model.getInstance().devices = JSONUtils.toFromJson((JSONArray) args[0], Device.class);
-				Timber.i("devices " + Model.getInstance().devices);
-				Events.post(new Events.DevicesChanged());
+				Timber.i("devices " + args[0].toString());
+				Model.getInstance().setDevices(JSONUtils.toFromJson((JSONArray) args[0], Device.class));
 			}
 		});
 
@@ -78,8 +76,7 @@ public class Network {
 			@Override
 			public void call(final Object... args) {
 				Timber.i("pages " + args[0].toString());
-				Model.getInstance().pages = JSONUtils.toFromJson((JSONArray) args[0], Page.class);
-				Events.post(new Events.PagesChanged());
+				Model.getInstance().setPages(JSONUtils.toFromJson((JSONArray) args[0], Page.class));
 			}
 		});
 
@@ -87,7 +84,7 @@ public class Network {
 			@Override
 			public void call(Object... args) {
 				Timber.i("groups " + args[0].toString());
-				Model.getInstance().groups = JSONUtils.toFromJson((JSONArray) args[0], Group.class);
+				Model.getInstance().setGroups(JSONUtils.toFromJson((JSONArray) args[0], Group.class));
 			}
 		});
 

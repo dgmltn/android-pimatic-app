@@ -68,7 +68,7 @@ public class PageView extends RecyclerView {
 		}
 
 		// Now let's add them, ordered by group
-		for (Group group : mModel.groups) {
+		for (Group group : mModel.getGroups()) {
 			boolean addedGroup = false;
 			for (String deviceId : group.devices) {
 				if (presentDevices.contains(deviceId)) {
