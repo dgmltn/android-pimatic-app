@@ -4,6 +4,8 @@ import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.network.Network;
 import com.dgmltn.pimatic.util.Events;
 
+import timber.log.Timber;
+
 /**
  * Created by doug on 6/2/15.
  */
@@ -62,10 +64,15 @@ public class Model {
 
 	public void setGroups(Group[] groups) {
 		this.groups = groups;
+		Events.post(new Events.GroupsChanged());
 	}
 
 	public Group[] getGroups() {
 		return groups;
+	}
+
+	public boolean hasGroups() {
+		return groups != null;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -81,6 +88,10 @@ public class Model {
 
 	public Page[] getPages() {
 		return pages;
+	}
+
+	public boolean hasPages() {
+		return pages != null;
 	}
 
 	public Page findPage(String id) {
@@ -106,8 +117,25 @@ public class Model {
 		Events.post(new Events.DevicesChanged());
 	}
 
+	public void updateDevice(DeviceAttributeChange change) {
+		Device device = findDevice(change.deviceId);
+		for (DeviceAttribute attribute : device.attributes) {
+			if (attribute.name.equals(change.attributeName) && attribute.lastUpdate < change.time) {
+				attribute.lastUpdate = change.time;
+				attribute.value = change.value;
+				//TODO: an observable event?
+				Timber.e("Attribute: " + device.name + "." + attribute.name + " = " + attribute.value);
+				break;
+			}
+		}
+	}
+
 	public Device[] getDevices() {
 		return devices;
+	}
+
+	public boolean hasDevices() {
+		return devices != null;
 	}
 
 	public Device findDevice(String id) {

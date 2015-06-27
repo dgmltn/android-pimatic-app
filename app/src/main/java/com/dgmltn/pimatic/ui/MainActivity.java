@@ -138,17 +138,22 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@Subscribe
-	public void otto(Events.DevicesChanged e) {
-		setupViewPager();
-	}
-
-	@Subscribe
 	public void otto(Events.AccountsChanged e) {
 		setupNetwork();
 	}
 
 	@Subscribe
+	public void otto(Events.DevicesChanged e) {
+		setupViewPager();
+	}
+
+	@Subscribe
 	public void otto(Events.PagesChanged e) {
+		setupViewPager();
+	}
+
+	@Subscribe
+	public void otto(Events.GroupsChanged e) {
 		setupViewPager();
 	}
 
@@ -172,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 			adapter.clear();
 			vPager.setAdapter(adapter);
 		}
-		if (model.getPages() != null && model.getDevices() != null) {
+		if (model.hasPages() && model.hasGroups() && model.hasDevices()) {
 			for (Page p : model.getPages()) {
 				if (p != null) {
 					adapter.add(p);

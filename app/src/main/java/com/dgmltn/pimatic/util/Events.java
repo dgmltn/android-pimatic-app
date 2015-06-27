@@ -123,6 +123,9 @@ public class Events {
 	public static final class PagesChanged {
 	}
 
+	public static final class GroupsChanged {
+	}
+
 	public static final class DesiredGroupTab {
 		public int tab;
 		public DesiredGroupTab(int tab) {

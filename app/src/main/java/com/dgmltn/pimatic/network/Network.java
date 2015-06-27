@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.dgmltn.pimatic.model.Device;
+import com.dgmltn.pimatic.model.DeviceAttributeChange;
 import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
@@ -54,7 +55,8 @@ public class Network {
 			@Override
 			public void call(Object... args) {
 				Timber.i("devices " + args[0].toString());
-				Model.getInstance().setDevices(JSONUtils.toFromJson((JSONArray) args[0], Device.class));
+				Device[] devices = JSONUtils.toFromJson((JSONArray) args[0], Device.class);
+				Model.getInstance().setDevices(devices);
 			}
 		});
 
@@ -62,6 +64,7 @@ public class Network {
 			@Override
 			public void call(Object... args) {
 				Timber.i("rules " + args[0].toString());
+				//TODO: add this to the Model?
 			}
 		});
 
@@ -69,6 +72,7 @@ public class Network {
 			@Override
 			public void call(Object... args) {
 				Timber.i("variables " + args[0].toString());
+				//TODO: add this to the Model?
 			}
 		});
 
@@ -76,7 +80,8 @@ public class Network {
 			@Override
 			public void call(final Object... args) {
 				Timber.i("pages " + args[0].toString());
-				Model.getInstance().setPages(JSONUtils.toFromJson((JSONArray) args[0], Page.class));
+				Page[] pages = JSONUtils.toFromJson((JSONArray) args[0], Page.class);
+				Model.getInstance().setPages(pages);
 			}
 		});
 
@@ -84,7 +89,8 @@ public class Network {
 			@Override
 			public void call(Object... args) {
 				Timber.i("groups " + args[0].toString());
-				Model.getInstance().setGroups(JSONUtils.toFromJson((JSONArray) args[0], Group.class));
+				Group[] groups = JSONUtils.toFromJson((JSONArray) args[0], Group.class);
+				Model.getInstance().setGroups(groups);
 			}
 		});
 
@@ -92,6 +98,8 @@ public class Network {
 			@Override
 			public void call(Object... args) {
 				Timber.i("deviceAttributeChanged " + args[0].toString());
+				DeviceAttributeChange change = JSONUtils.toFromJson((JSONObject) args[0], DeviceAttributeChange.class);
+				Model.getInstance().updateDevice(change);
 			}
 		});
 
