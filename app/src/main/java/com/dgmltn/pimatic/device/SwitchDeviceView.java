@@ -15,6 +15,8 @@ import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.network.Network;
+import com.dgmltn.pimatic.util.Events;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -87,6 +89,11 @@ public class SwitchDeviceView extends DeviceView {
 
 			}
 		});
+	}
+
+	@Subscribe
+	public void otto(Events.DeviceChanged e) {
+		super.otto(e);
 	}
 
 	@Override

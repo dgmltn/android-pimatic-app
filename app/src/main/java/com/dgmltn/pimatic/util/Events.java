@@ -3,6 +3,7 @@ package com.dgmltn.pimatic.util;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.dgmltn.pimatic.model.Device;
 import com.squareup.otto.Bus;
 import timber.log.Timber;
 
@@ -124,6 +125,13 @@ public class Events {
 	}
 
 	public static final class GroupsChanged {
+	}
+
+	public static final class DeviceChanged {
+		public String deviceId;
+		public DeviceChanged(String deviceId) {
+			this.deviceId = deviceId;
+		}
 	}
 
 	public static final class DesiredGroupTab {

@@ -123,8 +123,8 @@ public class Model {
 			if (attribute.name.equals(change.attributeName) && attribute.lastUpdate < change.time) {
 				attribute.lastUpdate = change.time;
 				attribute.value = change.value;
-				//TODO: an observable event?
-				Timber.e("Attribute: " + device.name + "." + attribute.name + " = " + attribute.value);
+				Events.post(new Events.DeviceChanged(device.id));
+				Timber.d("Attribute: " + device.name + "." + attribute.name + " = " + attribute.value);
 				break;
 			}
 		}

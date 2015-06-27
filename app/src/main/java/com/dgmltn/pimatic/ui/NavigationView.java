@@ -96,7 +96,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 	@Override
 	public boolean onNavigationItemSelected(MenuItem menuItem) {
 		if (menuItem.getGroupId() == R.id.accounts) {
-			Timber.e("navigation: accounts! " + menuItem.getTitle());
+			Timber.d("navigation: accounts! " + menuItem.getTitle());
 			AccountManager am = AccountManager.get(getContext());
 			for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
 				if (account.name.equals(menuItem.getTitle())) {
@@ -110,18 +110,18 @@ public class NavigationView extends android.support.design.widget.NavigationView
 			}
 		}
 		else if (menuItem.getGroupId() == R.id.groups) {
-			Timber.e("navigation: group # " + menuItem.getItemId());
+			Timber.d("navigation: group # " + menuItem.getItemId());
 			Events.post(new Events.DesiredGroupTab(menuItem.getItemId() - GROUP_START_ID));
 			closeDrawer();
 			return true;
 		}
 		else if (menuItem.getItemId() == R.id.add_account) {
-			Timber.e("navigation: add account!");
+			Timber.d("navigation: add account!");
 			addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_CONNECTION_URL);
 			return true;
 		}
 		else if (menuItem.getItemId() == R.id.manage_accounts) {
-			Timber.e("navigation: manage accounts!");
+			Timber.d("navigation: manage accounts!");
 			Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
 			//String[] authorities = {AccountGeneral.ACCOUNT_TYPE};
 			//intent.putExtra(Settings.EXTRA_AUTHORITIES, authorities);
@@ -129,19 +129,19 @@ public class NavigationView extends android.support.design.widget.NavigationView
 			return true;
 		}
 		else if (menuItem.getItemId() == R.id.rules) {
-			Timber.e("navigation: rules!");
+			Timber.d("navigation: rules!");
 		}
 		else if (menuItem.getItemId() == R.id.variables) {
-			Timber.e("navigation: variables!");
+			Timber.d("navigation: variables!");
 		}
 		else if (menuItem.getItemId() == R.id.messages) {
-			Timber.e("navigation: messages!");
+			Timber.d("navigation: messages!");
 		}
 		else if (menuItem.getItemId() == R.id.events) {
-			Timber.e("navigation: events!");
+			Timber.d("navigation: events!");
 		}
 		else if (menuItem.getItemId() == R.id.connections) {
-			Timber.e("navigation: connections!");
+			Timber.d("navigation: connections!");
 		}
 		return false;
 	}

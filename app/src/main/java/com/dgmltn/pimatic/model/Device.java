@@ -21,7 +21,7 @@ public class Device implements FromJson {
 
 	@Override
 	public boolean from(JSONObject object) {
-		Timber.e("Device: " + object.toString());
+		Timber.d("Device: " + object.toString());
 		id = object.optString("id");
 		name = object.optString("name");
 		template = object.optString("template");
