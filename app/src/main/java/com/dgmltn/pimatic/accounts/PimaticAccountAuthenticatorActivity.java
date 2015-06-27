@@ -1,28 +1,34 @@
 package com.dgmltn.pimatic.accounts;
 
 import android.accounts.Account;
-import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.dgmltn.pimatic.R;
+import com.dgmltn.pimatic.activity.AppCompatAccountAuthenticatorActivity;
 import com.dgmltn.pimatic.model.LoginResponse;
 import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.network.Network;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import butterknife.OnItemSelected;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import timber.log.Timber;
 
-public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorActivity {
+public class PimaticAccountAuthenticatorActivity extends AppCompatAccountAuthenticatorActivity {
 
     public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
     public final static String ARG_AUTH_TYPE = "AUTH_TYPE";
@@ -31,8 +37,8 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
 
     private final String TAG = this.getClass().getSimpleName();
 
-	@InjectView(R.id.protocol)
-	public Spinner vProtocol;
+    @InjectView(R.id.ssl)
+    CheckBox vSsl;
 
 	@InjectView(R.id.host)
 	public EditText vHost;
@@ -55,14 +61,20 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.v("onCreate");
-        setContentView(R.layout.account_settings);
+        setContentView(R.layout.activity_account);
 		ButterKnife.inject(this);
-		
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
+        }
+
         mAccountManager = AccountManager.get(getBaseContext());
 
         Intent intent = getIntent();
         ConnectionOptions conOpts = ConnectionOptions.fromIntent(intent);
-        vProtocol.setSelection(conOpts.protocol == null || conOpts.protocol.equals("http") ? 0 : 1);
+        vSsl.setChecked(conOpts.protocol != null && conOpts.protocol.equals("https"));
         vPort.setText("" + conOpts.port);
         vHost.setText(conOpts.host != null ? conOpts.host : "");
         vUsername.setText(conOpts.username != null ? conOpts.username : "");
@@ -73,16 +85,21 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
         vUsername.setEnabled(isNew);
     }
 
-	@OnItemSelected(R.id.protocol)
+	@OnCheckedChanged(R.id.ssl)
 	public void protocolItemSelected() {
-		String selectedProtocol = vProtocol.getSelectedItem().toString();
 		String port = vPort.getText().toString();
-		if (selectedProtocol.equals("https") && (port.length() == 0 || port.equals("80"))) {
-			vPort.setText("443");
+		if (vSsl.isChecked()) {
+            vPort.setHint("443");
+            if (port.length() == 0 || port.equals("80")) {
+                vPort.setText("443");
+            }
 		}
-		else if (selectedProtocol.equals("http") && (port.length() == 0 || port.equals("443"))) {
-			vPort.setText("80");
-		}
+		else {
+            vPort.setHint("80");
+            if (port.length() == 0 || port.equals("443")) {
+                vPort.setText("80");
+            }
+        }
 	}
 
     @OnClick(R.id.save)
@@ -105,7 +122,7 @@ public class PimaticAccountAuthenticatorActivity extends AccountAuthenticatorAct
     public void submit() {
 		Timber.v("submit()");
         final ConnectionOptions conOpts = new ConnectionOptions();
-        conOpts.protocol = vProtocol.getSelectedItem().toString();
+        conOpts.protocol = vSsl.isChecked() ? "https" : "http";
         conOpts.host = vHost.getText().toString();
         conOpts.port = Integer.parseInt(vPort.getText().toString());
         conOpts.username = vUsername.getText().toString();

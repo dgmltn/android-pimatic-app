@@ -1,4 +1,4 @@
-package com.dgmltn.pimatic.ui;
+package com.dgmltn.pimatic.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,7 @@ import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
 import com.dgmltn.pimatic.network.ConnectionOptions;
+import com.dgmltn.pimatic.ui.PageView;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 

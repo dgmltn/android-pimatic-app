@@ -2,6 +2,17 @@
     <string name="app_name">Pimatic</string>
     <string name="account_manager_label">Pimatic</string>
 
+    <!-- Sign In -->
+    <string name="Sign_in_to_Pimatic">Sign in to Pimatic</string>
+    <string name="Host">Host</string>
+    <string name="host_hint">demo.pimatic.org</string>
+    <string name="Port">Port</string>
+    <string name="port_hint">80</string>
+    <string name="SSL">SSL</string>
+    <string name="Auth">Auth</string>
+    <string name="Username_hint">Username</string>
+    <string name="Password_hint">Password</string>
+
     <!-- Overflow menu items -->
     <string name="action_settings">Settings</string>
 
