@@ -27,4 +27,9 @@
 
     <!-- Name for group of devices with no specific group -->
     <string name="Ungrouped">Ungrouped</string>
+
+    <!-- Devices -->
+    <string name="Up">Up</string>
+    <string name="Down">Down</string>
+
 </resources>
