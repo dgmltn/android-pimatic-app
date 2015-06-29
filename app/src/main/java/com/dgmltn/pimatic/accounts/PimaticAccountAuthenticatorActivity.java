@@ -85,6 +85,9 @@ public class PimaticAccountAuthenticatorActivity extends AppCompatAccountAuthent
 		vUsername.setText(conOpts.username != null ? conOpts.username : "");
 		vPassword.setText(conOpts.password != null ? conOpts.password : "");
 
+		// http://stackoverflow.com/questions/24117178/android-typeface-is-changed-when-i-apply-password-type-on-edittext
+		vPassword.setTypeface(vUsername.getTypeface());
+
 		boolean isNew = intent.getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
 		vHost.setEnabled(isNew);
 		vUsername.setEnabled(isNew);
