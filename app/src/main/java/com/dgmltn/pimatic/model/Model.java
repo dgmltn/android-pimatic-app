@@ -49,6 +49,9 @@ public class Model {
 	}
 
 	public Network getNetwork() {
+		if (network == null && connection != null) {
+			network = new Network(connection);
+		}
 		return network;
 	}
 
