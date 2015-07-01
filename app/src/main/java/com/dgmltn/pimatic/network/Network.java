@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttributeChange;
+import com.dgmltn.pimatic.model.DevicesResponse;
 import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
@@ -15,10 +16,14 @@ import com.dgmltn.pimatic.util.JSONUtils;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.Gson;
 import com.squareup.okhttp.Credentials;
 
+import retrofit.Callback;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
 public class Network {
@@ -27,6 +32,7 @@ public class Network {
 	public Network(ConnectionOptions connection) {
 		this.connection = connection;
 		setupWebsocket();
+		downloadDevices();
 	}
 
 	public void teardown() {
@@ -50,15 +56,6 @@ public class Network {
 				return;
 			}
 		}
-
-		socket.on("devices", new Emitter.Listener() {
-			@Override
-			public void call(Object... args) {
-				Timber.i("devices " + args[0].toString());
-				Device[] devices = JSONUtils.toFromJson((JSONArray) args[0], Device.class);
-				Model.getInstance().setDevices(devices);
-			}
-		});
 
 		socket.on("rules", new Emitter.Listener() {
 			@Override
@@ -113,7 +110,6 @@ public class Network {
 		}
 
 		socket.disconnect();
-		socket.off("devices");
 		socket.off("rules");
 		socket.off("variables");
 		socket.off("pages");
@@ -164,6 +160,22 @@ public class Network {
 			.setRequestInterceptor(requestInterceptor)
 			.build()
 			.create(PimaticService.class);
+	}
+
+	public void downloadDevices() {
+		getRest();
+		rest.getDevices(new Callback<DevicesResponse>() {
+			@Override
+			public void success(DevicesResponse devicesResponse, Response response) {
+				Timber.i("devices: " + new Gson().toJson(devicesResponse.devices));
+				Model.getInstance().setDevices(devicesResponse.devices);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				Timber.e("DownloadDevices failure! " + error.getMessage());
+			}
+		});
 	}
 
 }

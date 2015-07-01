@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dgmltn.pimatic.model.ActionResponse;
+import com.dgmltn.pimatic.model.DevicesResponse;
 import com.dgmltn.pimatic.model.LoginResponse;
 import com.dgmltn.pimatic.model.Message;
 
@@ -39,6 +40,11 @@ public interface PimaticService {
 	LoginResponse loginSynchronous(
 		@Field("username") String username,
 		@Field("password") String password
+	);
+
+	@GET("/api/devices")
+	void getDevices(
+		Callback<DevicesResponse> callback
 	);
 
 	@GET("/api/device/{deviceId}/{actionName}")

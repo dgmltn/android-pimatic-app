@@ -14,12 +14,7 @@ import com.dgmltn.pimatic.util.FromJson;
  * }
  */
 public class DeviceActionParam implements FromJson {
-	public String name;
 	public String type;
-
-	public DeviceActionParam(String paramName) {
-		name = paramName;
-	}
 
 	@Override
 	public boolean from(JSONObject object) {

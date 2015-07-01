@@ -37,7 +37,7 @@ public class Model {
 			if (network != null) {
 				network.teardown();
 			}
-			network = new Network(connection);
+			getNetwork();
 		}
 	}
 

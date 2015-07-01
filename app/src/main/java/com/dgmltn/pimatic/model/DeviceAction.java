@@ -1,6 +1,8 @@
 package com.dgmltn.pimatic.model;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -11,7 +13,7 @@ import com.dgmltn.pimatic.util.FromJson;
  */
 public class DeviceAction implements FromJson {
 	public String description;
-	public DeviceActionParam[] params;
+	public Map<String, DeviceActionParam> params;
 	public String name;
 
 	@Override
@@ -20,17 +22,16 @@ public class DeviceAction implements FromJson {
 
 		JSONObject jsonParams = object.optJSONObject("params");
 		if (jsonParams != null) {
-			params = new DeviceActionParam[jsonParams.length()];
+			params = new HashMap<>();
 			Iterator<String> iterator = object.keys();
-			int i = 0;
 			while (iterator.hasNext()) {
 				String paramName = iterator.next();
 				if (paramName != null) {
 					JSONObject paramObject = object.optJSONObject(paramName);
 					if (paramObject != null) {
-						DeviceActionParam p = new DeviceActionParam(paramName);
+						DeviceActionParam p = new DeviceActionParam();
 						p.from(paramObject);
-						params[i++] = p;
+						params.put(paramName, p);
 					}
 				}
 			}
