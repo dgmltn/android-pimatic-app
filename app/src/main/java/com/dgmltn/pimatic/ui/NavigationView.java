@@ -79,6 +79,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 		Events.register(this);
+		bind();
 	}
 
 	@Override
