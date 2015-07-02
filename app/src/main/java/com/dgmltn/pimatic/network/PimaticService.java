@@ -4,8 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.dgmltn.pimatic.model.ActionResponse;
+import com.dgmltn.pimatic.model.DevicesResponse;
 import com.dgmltn.pimatic.model.LoginResponse;
 import com.dgmltn.pimatic.model.Message;
+import com.dgmltn.pimatic.model.ConfigResponse;
+import com.dgmltn.pimatic.model.PagesResponse;
+import com.dgmltn.pimatic.model.RulesResponse;
+import com.dgmltn.pimatic.model.VariablesResponse;
 
 import retrofit.Callback;
 import retrofit.http.Field;
@@ -41,6 +46,11 @@ public interface PimaticService {
 		@Field("password") String password
 	);
 
+	@GET("/api/devices")
+	void getDevices(
+		Callback<DevicesResponse> callback
+	);
+
 	@GET("/api/device/{deviceId}/{actionName}")
 	void deviceAction(
 		@Path("deviceId") String deviceId,
@@ -68,5 +78,25 @@ public interface PimaticService {
 		@Path("deviceId") String deviceId,
 		@Query("buttonId") String buttonId,
 		Callback<ActionResponse> callback
+	);
+
+	@GET("/api/pages")
+	void getPages(
+		Callback<PagesResponse> callback
+	);
+
+	@GET("/api/config")
+	void getConfig(
+		Callback<ConfigResponse> callback
+	);
+
+	@GET("/api/rules")
+	void getRules(
+		Callback<RulesResponse> callback
+	);
+
+	@GET("/api/variables")
+	void getVariables(
+		Callback<VariablesResponse> callback
 	);
 }

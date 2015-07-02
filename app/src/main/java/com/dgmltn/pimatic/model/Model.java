@@ -10,8 +10,6 @@ import timber.log.Timber;
  * Created by doug on 6/2/15.
  */
 public class Model {
-	//TODO: public Variable[] variables;
-
 	private static Model sInstance = new Model();
 
 	private Model() {
@@ -34,10 +32,8 @@ public class Model {
 			pages = null;
 			devices = null;
 			this.connection = connection;
-			if (network != null) {
-				network.teardown();
-			}
-			network = new Network(connection);
+			deconfigureNetwork();
+			getNetwork();
 		}
 	}
 
@@ -122,6 +118,10 @@ public class Model {
 
 	public void updateDevice(DeviceAttributeChange change) {
 		Device device = findDevice(change.deviceId);
+		if (device == null) {
+			// Device not found... throw this away
+			return;
+		}
 		for (DeviceAttribute attribute : device.attributes) {
 			if (attribute.name.equals(change.attributeName) && attribute.lastUpdate < change.time) {
 				attribute.lastUpdate = change.time;
@@ -142,11 +142,43 @@ public class Model {
 	}
 
 	public Device findDevice(String id) {
-		for (Device d : devices) {
-			if (id.equals(d.id)) {
-				return d;
+		if (devices != null) {
+			for (Device d : devices) {
+				if (id.equals(d.id)) {
+					return d;
+				}
 			}
 		}
 		return null;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Rules
+	///////////////////////////////////////////////////////////////////////////
+
+	private Rule[] rules;
+
+	public void setRules(Rule[] rules) {
+		this.rules = rules;
+		Events.post(new Events.RulesChanged());
+	}
+
+	public Rule[] getRules() {
+		return rules;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Variables
+	///////////////////////////////////////////////////////////////////////////
+
+	private Variable[] variables;
+
+	public void setVariables(Variable[] variables) {
+		this.variables = variables;
+		Events.post(new Events.VariablesChanged());
+	}
+
+	public Variable[] getVariables() {
+		return variables;
 	}
 }

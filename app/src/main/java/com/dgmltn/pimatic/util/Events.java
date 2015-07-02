@@ -127,6 +127,12 @@ public class Events {
 	public static final class GroupsChanged {
 	}
 
+	public static final class RulesChanged {
+	}
+
+	public static final class VariablesChanged {
+	}
+
 	public static final class DeviceChanged {
 		public String deviceId;
 		public DeviceChanged(String deviceId) {

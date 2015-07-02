@@ -55,6 +55,8 @@ public class PageView extends RecyclerView {
 		return mPage;
 	}
 
+	//TODO: reorder using this algorithm:
+	// https://github.com/pimatic/pimatic/issues/672#issuecomment-110598082
 	private void bind() {
 		if (mPage == null || mModel == null) {
 			Timber.e("cannot bind()");
