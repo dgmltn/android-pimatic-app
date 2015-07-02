@@ -10,8 +10,6 @@ import timber.log.Timber;
  * Created by doug on 6/2/15.
  */
 public class Model {
-	//TODO: public Variable[] variables;
-
 	private static Model sInstance = new Model();
 
 	private Model() {
@@ -148,5 +146,35 @@ public class Model {
 			}
 		}
 		return null;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Rules
+	///////////////////////////////////////////////////////////////////////////
+
+	private Rule[] rules;
+
+	public void setRules(Rule[] rules) {
+		this.rules = rules;
+		Events.post(new Events.RulesChanged());
+	}
+
+	public Rule[] getRules() {
+		return rules;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Variables
+	///////////////////////////////////////////////////////////////////////////
+
+	private Variable[] variables;
+
+	public void setVariables(Variable[] variables) {
+		this.variables = variables;
+		Events.post(new Events.VariablesChanged());
+	}
+
+	public Variable[] getVariables() {
+		return variables;
 	}
 }

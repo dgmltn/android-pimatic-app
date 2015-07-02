@@ -6,13 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttributeChange;
 import com.dgmltn.pimatic.model.DevicesResponse;
 import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
-import com.dgmltn.pimatic.model.Page;
-import com.dgmltn.pimatic.util.JSONUtils;
+import com.dgmltn.pimatic.model.PagesResponse;
+import com.dgmltn.pimatic.model.RulesResponse;
+import com.dgmltn.pimatic.model.VariablesResponse;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -33,6 +33,9 @@ public class Network {
 		this.connection = connection;
 		setupWebsocket();
 		downloadDevices();
+		downloadPages();
+		//TODO: downloadRules();
+		//TODO: downloadVariables();
 	}
 
 	public void teardown() {
@@ -57,36 +60,12 @@ public class Network {
 			}
 		}
 
-		socket.on("rules", new Emitter.Listener() {
-			@Override
-			public void call(Object... args) {
-				Timber.i("rules " + args[0].toString());
-				//TODO: add this to the Model?
-			}
-		});
-
-		socket.on("variables", new Emitter.Listener() {
-			@Override
-			public void call(Object... args) {
-				Timber.i("variables " + args[0].toString());
-				//TODO: add this to the Model?
-			}
-		});
-
-		socket.on("pages", new Emitter.Listener() {
-			@Override
-			public void call(final Object... args) {
-				Timber.i("pages " + args[0].toString());
-				Page[] pages = JSONUtils.toFromJson((JSONArray) args[0], Page.class);
-				Model.getInstance().setPages(pages);
-			}
-		});
-
 		socket.on("groups", new Emitter.Listener() {
 			@Override
 			public void call(Object... args) {
-				Timber.i("groups " + args[0].toString());
-				Group[] groups = JSONUtils.toFromJson((JSONArray) args[0], Group.class);
+				String responseString = args[0].toString();
+				Timber.i("groups (" + args.length + " args)" + responseString);
+				Group[] groups = new Gson().fromJson(responseString, Group[].class);
 				Model.getInstance().setGroups(groups);
 			}
 		});
@@ -94,8 +73,9 @@ public class Network {
 		socket.on("deviceAttributeChanged", new Emitter.Listener() {
 			@Override
 			public void call(Object... args) {
-				Timber.i("deviceAttributeChanged " + args[0].toString());
-				DeviceAttributeChange change = JSONUtils.toFromJson((JSONObject) args[0], DeviceAttributeChange.class);
+				String responseString = args[0].toString();
+				Timber.i("deviceAttributeChanged (" + args.length + " args)" + responseString);
+				DeviceAttributeChange change = new Gson().fromJson(responseString, DeviceAttributeChange.class);
 				Model.getInstance().updateDevice(change);
 			}
 		});
@@ -109,10 +89,6 @@ public class Network {
 			return;
 		}
 
-		socket.disconnect();
-		socket.off("rules");
-		socket.off("variables");
-		socket.off("pages");
 		socket.off("groups");
 		socket.off("deviceAttributeChanged");
 
@@ -162,7 +138,7 @@ public class Network {
 			.create(PimaticService.class);
 	}
 
-	public void downloadDevices() {
+	private void downloadDevices() {
 		getRest();
 		rest.getDevices(new Callback<DevicesResponse>() {
 			@Override
@@ -174,6 +150,55 @@ public class Network {
 			@Override
 			public void failure(RetrofitError error) {
 				Timber.e("DownloadDevices failure! " + error.getMessage());
+			}
+		});
+	}
+
+	private void downloadPages() {
+		getRest();
+		rest.getPages(new Callback<PagesResponse>() {
+			@Override
+			public void success(PagesResponse pagesResponse, Response response) {
+				Timber.i("pages: " + new Gson().toJson(pagesResponse.pages));
+				Model.getInstance().setPages(pagesResponse.pages);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				Timber.e("DownloadPages failure! " + error.getMessage());
+			}
+		});
+
+	}
+
+	private void downloadRules() {
+		getRest();
+		rest.getRules(new Callback<RulesResponse>() {
+			@Override
+			public void success(RulesResponse rulesResponse, Response response) {
+				Timber.i("rules: " + new Gson().toJson(rulesResponse.rules));
+				Model.getInstance().setRules(rulesResponse.rules);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				Timber.e("DownloadRules failure! " + error.getMessage());
+			}
+		});
+	}
+
+	private void downloadVariables() {
+		getRest();
+		rest.getVariables(new Callback<VariablesResponse>() {
+			@Override
+			public void success(VariablesResponse variablesResponse, Response response) {
+				Timber.i("rules: " + new Gson().toJson(variablesResponse.variables));
+				Model.getInstance().setVariables(variablesResponse.variables);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				Timber.e("DownloadRules failure! " + error.getMessage());
 			}
 		});
 	}
