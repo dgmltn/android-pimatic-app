@@ -30,10 +30,11 @@
 
     </LinearLayout>
 
-    <com.wefika.flowlayout.FlowLayout
+    <TextView
         android:id="@+id/attributes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         android:gravity="end|top" />
 
 </LinearLayout>

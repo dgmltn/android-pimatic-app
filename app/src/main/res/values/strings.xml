@@ -31,5 +31,6 @@
     <!-- Devices -->
     <string name="Up">Up</string>
     <string name="Down">Down</string>
+    <string name="Unknown">Unknown</string>
 
 </resources>

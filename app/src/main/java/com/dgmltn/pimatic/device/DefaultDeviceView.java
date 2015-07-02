@@ -2,6 +2,13 @@ package com.dgmltn.pimatic.device;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +19,7 @@ import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
 import com.dgmltn.pimatic.util.Events;
+import com.dgmltn.pimatic.util.SpannableBuilder;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -29,7 +37,7 @@ public class DefaultDeviceView extends DeviceView {
 	TextView vTemplate;
 
 	@InjectView(R.id.attributes)
-	ViewGroup vAttributes;
+	TextView vAttributes;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
 		@Override
@@ -80,13 +88,35 @@ public class DefaultDeviceView extends DeviceView {
 	public void bind() {
 		vText.setText(device.name);
 		vTemplate.setText(device.template);
-		vAttributes.removeAllViews();
-		for (DeviceAttribute attr : device.attributes) {
-			AttributeView v = new AttributeView(getContext());
-			v.setAttribute(attr);
-			vAttributes.addView(v);
-		}
-
+		vAttributes.setText(getSpannedString(getContext()));
 	}
+
+
+	public SpannableStringBuilder getSpannedString(Context context) {
+		SpannableBuilder builder = new SpannableBuilder(context);
+
+		for (DeviceAttribute attr : device.attributes) {
+			if (!TextUtils.isEmpty(attr.acronym)) {
+				builder.append(attr.acronym.toUpperCase() + "\u00A0",
+					new StyleSpan(android.graphics.Typeface.BOLD),
+					new ForegroundColorSpan(Color.GRAY),
+					new RelativeSizeSpan(0.8f));
+			}
+			if (TextUtils.isEmpty(attr.value)) {
+				builder.append(context.getString(R.string.Unknown),
+					new ForegroundColorSpan(Color.GRAY));
+			}
+			else {
+				builder.append(attr.value);
+			}
+			if (!TextUtils.isEmpty(attr.unit)) {
+				builder.append(attr.unit,
+					new ForegroundColorSpan(Color.GRAY));
+			}
+			builder.append(" ");
+		}
+		return builder.build();
+	}
+
 
 }
