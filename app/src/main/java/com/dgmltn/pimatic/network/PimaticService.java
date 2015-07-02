@@ -7,10 +7,10 @@ import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.DevicesResponse;
 import com.dgmltn.pimatic.model.LoginResponse;
 import com.dgmltn.pimatic.model.Message;
+import com.dgmltn.pimatic.model.ConfigResponse;
 import com.dgmltn.pimatic.model.PagesResponse;
 import com.dgmltn.pimatic.model.RulesResponse;
 import com.dgmltn.pimatic.model.VariablesResponse;
-import com.squareup.okhttp.Call;
 
 import retrofit.Callback;
 import retrofit.http.Field;
@@ -83,6 +83,11 @@ public interface PimaticService {
 	@GET("/api/pages")
 	void getPages(
 		Callback<PagesResponse> callback
+	);
+
+	@GET("/api/config")
+	void getConfig(
+		Callback<ConfigResponse> callback
 	);
 
 	@GET("/api/rules")

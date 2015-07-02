@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
 	@Subscribe
 	public void otto(Events.AccountsChanged e) {
 		setupNetwork();
+		setupViewPager();
 	}
 
 	@Subscribe

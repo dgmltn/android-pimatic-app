@@ -32,9 +32,7 @@ public class Model {
 			pages = null;
 			devices = null;
 			this.connection = connection;
-			if (network != null) {
-				network.teardown();
-			}
+			deconfigureNetwork();
 			getNetwork();
 		}
 	}
@@ -120,6 +118,10 @@ public class Model {
 
 	public void updateDevice(DeviceAttributeChange change) {
 		Device device = findDevice(change.deviceId);
+		if (device == null) {
+			// Device not found... throw this away
+			return;
+		}
 		for (DeviceAttribute attribute : device.attributes) {
 			if (attribute.name.equals(change.attributeName) && attribute.lastUpdate < change.time) {
 				attribute.lastUpdate = change.time;
@@ -140,9 +142,11 @@ public class Model {
 	}
 
 	public Device findDevice(String id) {
-		for (Device d : devices) {
-			if (id.equals(d.id)) {
-				return d;
+		if (devices != null) {
+			for (Device d : devices) {
+				if (id.equals(d.id)) {
+					return d;
+				}
 			}
 		}
 		return null;

@@ -2,14 +2,13 @@ package com.dgmltn.pimatic.network;
 
 import java.net.URISyntaxException;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.dgmltn.pimatic.model.DeviceAttributeChange;
 import com.dgmltn.pimatic.model.DevicesResponse;
-import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
+import com.dgmltn.pimatic.model.ConfigResponse;
 import com.dgmltn.pimatic.model.PagesResponse;
 import com.dgmltn.pimatic.model.RulesResponse;
 import com.dgmltn.pimatic.model.VariablesResponse;
@@ -31,11 +30,13 @@ public class Network {
 
 	public Network(ConnectionOptions connection) {
 		this.connection = connection;
-		setupWebsocket();
 		downloadDevices();
-		downloadPages();
+		//TODO: downloadPages();
+		//TODO: downloadGroups();
+		downloadConfig();
 		//TODO: downloadRules();
 		//TODO: downloadVariables();
+		setupWebsocket();
 	}
 
 	public void teardown() {
@@ -60,16 +61,6 @@ public class Network {
 			}
 		}
 
-		socket.on("groups", new Emitter.Listener() {
-			@Override
-			public void call(Object... args) {
-				String responseString = args[0].toString();
-				Timber.i("groups (" + args.length + " args)" + responseString);
-				Group[] groups = new Gson().fromJson(responseString, Group[].class);
-				Model.getInstance().setGroups(groups);
-			}
-		});
-
 		socket.on("deviceAttributeChanged", new Emitter.Listener() {
 			@Override
 			public void call(Object... args) {
@@ -89,7 +80,6 @@ public class Network {
 			return;
 		}
 
-		socket.off("groups");
 		socket.off("deviceAttributeChanged");
 
 		socket.disconnect();
@@ -149,7 +139,7 @@ public class Network {
 
 			@Override
 			public void failure(RetrofitError error) {
-				Timber.e("DownloadDevices failure! " + error.getMessage());
+				Timber.e("downloadDevices failure! " + error.getMessage());
 			}
 		});
 	}
@@ -165,10 +155,28 @@ public class Network {
 
 			@Override
 			public void failure(RetrofitError error) {
-				Timber.e("DownloadPages failure! " + error.getMessage());
+				Timber.e("downloadPages failure! " + error.getMessage());
 			}
 		});
+	}
 
+	private void downloadConfig() {
+		getRest();
+		Timber.i("downloadConfig()");
+		rest.getConfig(new Callback<ConfigResponse>() {
+			@Override
+			public void success(ConfigResponse pagesAndGroupsResponse, Response response) {
+				Timber.i("pagesAndGroups: pages: " + new Gson().toJson(pagesAndGroupsResponse.config.pages));
+				Timber.i("pagesAndGroups: groups: " + new Gson().toJson(pagesAndGroupsResponse.config.groups));
+				Model.getInstance().setPages(pagesAndGroupsResponse.config.pages);
+				Model.getInstance().setGroups(pagesAndGroupsResponse.config.groups);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				Timber.e("downloadPagesAndGroups failure! " + error.getMessage());
+			}
+		});
 	}
 
 	private void downloadRules() {
@@ -182,7 +190,7 @@ public class Network {
 
 			@Override
 			public void failure(RetrofitError error) {
-				Timber.e("DownloadRules failure! " + error.getMessage());
+				Timber.e("downloadRules failure! " + error.getMessage());
 			}
 		});
 	}
@@ -198,7 +206,7 @@ public class Network {
 
 			@Override
 			public void failure(RetrofitError error) {
-				Timber.e("DownloadRules failure! " + error.getMessage());
+				Timber.e("downloadVariables failure! " + error.getMessage());
 			}
 		});
 	}
