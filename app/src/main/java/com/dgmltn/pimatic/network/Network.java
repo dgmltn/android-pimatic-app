@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.dgmltn.pimatic.model.DeviceAttributeChange;
 import com.dgmltn.pimatic.model.DevicesResponse;
+import com.dgmltn.pimatic.model.GroupsResponse;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.ConfigResponse;
 import com.dgmltn.pimatic.model.PagesResponse;
@@ -31,9 +32,9 @@ public class Network {
 	public Network(ConnectionOptions connection) {
 		this.connection = connection;
 		downloadDevices();
-		//TODO: downloadPages();
-		//TODO: downloadGroups();
-		downloadConfig();
+		downloadPages();
+		downloadGroups();
+		//downloadConfig();
 		//TODO: downloadRules();
 		//TODO: downloadVariables();
 		setupWebsocket();
@@ -156,6 +157,23 @@ public class Network {
 			@Override
 			public void failure(RetrofitError error) {
 				Timber.e("downloadPages failure! " + error.getMessage());
+			}
+		});
+	}
+
+	private void downloadGroups() {
+		getRest();
+		Timber.i("downloadGroups()");
+		rest.getGroups(new Callback<GroupsResponse>() {
+			@Override
+			public void success(GroupsResponse groupsResponse, Response response) {
+				Timber.i("groups: " + new Gson().toJson(groupsResponse.groups));
+				Model.getInstance().setGroups(groupsResponse.groups);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				Timber.e("downloadGroups failure! " + error.getMessage());
 			}
 		});
 	}
