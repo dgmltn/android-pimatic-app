@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.DeviceId;
 import com.dgmltn.pimatic.model.Group;
 import com.dgmltn.pimatic.model.Model;
@@ -55,7 +56,7 @@ public class PageView extends RecyclerView {
 		return mPage;
 	}
 
-	//TODO: reorder using this algorithm:
+	// Sort algorithm:
 	// https://github.com/pimatic/pimatic/issues/672#issuecomment-110598082
 	private void bind() {
 		if (mPage == null || mModel == null) {
@@ -72,14 +73,15 @@ public class PageView extends RecyclerView {
 		// Now let's add them, ordered by group
 		for (Group group : mModel.getGroups()) {
 			boolean addedGroup = false;
-			for (String deviceId : group.devices) {
-				if (presentDevices.contains(deviceId)) {
+			for (DeviceId deviceId : mPage.devices) {
+				String id = deviceId.deviceId;
+				if (presentDevices.contains(id) && group.containsDevice(id)) {
 					if (!addedGroup) {
 						mAdapter.addGroup(group.name);
 						addedGroup = true;
 					}
-					mAdapter.addDevice(mModel.findDevice(deviceId));
-					presentDevices.remove(deviceId);
+					mAdapter.addDevice(mModel.findDevice(id));
+					presentDevices.remove(id);
 				}
 			}
 		}
@@ -87,12 +89,13 @@ public class PageView extends RecyclerView {
 		// Adding the ungrouped devices
 		boolean addedGroup = false;
 		for (DeviceId deviceId : mPage.devices) {
-			if (presentDevices.contains(deviceId.deviceId)) {
+			String id = deviceId.deviceId;
+			if (presentDevices.contains(id)) {
 				if (!addedGroup) {
-					mAdapter.addGroup("Ungrouped");
+					mAdapter.addGroup(getContext().getString(R.string.Ungrouped));
 					addedGroup = true;
 				}
-				mAdapter.addDevice(mModel.findDevice(deviceId.deviceId));
+				mAdapter.addDevice(mModel.findDevice(id));
 			}
 		}
 	}
