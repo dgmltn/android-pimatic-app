@@ -79,6 +79,28 @@ public class ConnectionOptions {
         conOpts.port = settings.getInt("port", 0);
         conOpts.username = settings.getString("username", "");
         conOpts.password = settings.getString("password", "");
+
+        // Verify that the connection stored in settings still exists in the AccountManager
+        if (conOpts != null) {
+            AccountManager am = AccountManager.get(context);
+            String authToken = conOpts.toAuthToken();
+            boolean match = false;
+            for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
+                String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
+                if (authUrl.equals(authToken)) {
+                    match = true;
+                    break;
+                }
+            }
+
+            // A connection was found in preferences, but it doesn't match
+            // any existing Account. So, don't use it, and erase it from preferences
+            if (!match) {
+                conOpts = null;
+                eraseSettings(context);
+            }
+        }
+
         return conOpts;
     }
 

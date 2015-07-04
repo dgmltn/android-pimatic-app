@@ -92,30 +92,9 @@ public class MainActivity extends AppCompatActivity {
 		// See if they've saved a connection in settings
 		ConnectionOptions conOpts = ConnectionOptions.fromSettings(this);
 
-		AccountManager am = AccountManager.get(this);
-
-		// Verify that the connection stored in settings still exists in the AccountManager
-		if (conOpts != null) {
-			String authToken = conOpts.toAuthToken();
-			boolean match = false;
-			for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
-				String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
-				if (authUrl.equals(authToken)) {
-					match = true;
-					break;
-				}
-			}
-
-			// A connection was found in preferences, but it doesn't match
-			// any existing Account. So, don't use it, and erase it from preferences
-			if (!match) {
-				conOpts = null;
-				ConnectionOptions.eraseSettings(this);
-			}
-		}
-
 		// No existing connection was found, just use the first account
 		if (conOpts == null) {
+			AccountManager am = AccountManager.get(this);
 			for (Account account : am.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)) {
 				String authUrl = am.getUserData(account, AccountGeneral.ACCOUNT_USER_DATA_URL);
 				conOpts = ConnectionOptions.fromAuthToken(authUrl);
@@ -134,13 +113,12 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Model.getInstance().deconfigureNetwork();
+		Model.getInstance().detachNetwork();
 		Events.unregister(this);
 	}
 
 	@Subscribe
-	public void otto(Events.AccountsChanged e) {
-		setupNetwork();
+	public void otto(Events.NetworkChanged e) {
 		setupViewPager();
 	}
 

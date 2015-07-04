@@ -118,6 +118,9 @@ public class Events {
 	public static final class AccountsChanged {
 	}
 
+	public static final class NetworkChanged {
+	}
+
 	public static final class DevicesChanged {
 	}
 

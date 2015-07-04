@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.activity.AppCompatAccountAuthenticatorActivity;
 import com.dgmltn.pimatic.model.LoginResponse;
+import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.network.Network;
 import com.dgmltn.pimatic.util.Events;
@@ -203,6 +204,7 @@ public class PimaticAccountAuthenticatorActivity extends AppCompatAccountAuthent
 
 		ConnectionOptions.toSettings(conOps, this);
 		Events.post(new Events.AccountsChanged());
+		Model.getInstance().configureNetwork(conOps);
 
 		setAccountAuthenticatorResult(intent.getExtras());
 		setResult(RESULT_OK, intent);

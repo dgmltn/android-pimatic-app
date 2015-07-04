@@ -26,18 +26,20 @@ public class Model {
 	private ConnectionOptions connection;
 	private Network network;
 
-	public void configureNetwork(ConnectionOptions connection) {
-		if (connection != null && !connection.equals(this.connection)) {
+	public void configureNetwork(ConnectionOptions cxn) {
+		if (connection == null || !cxn.equals(connection)) {
 			groups = null;
 			pages = null;
 			devices = null;
-			this.connection = connection;
-			deconfigureNetwork();
-			getNetwork();
+			connection = null;
 		}
+		detachNetwork();
+		connection = cxn;
+		getNetwork();
+		Events.post(new Events.NetworkChanged());
 	}
 
-	public void deconfigureNetwork() {
+	public void detachNetwork() {
 		if (network != null) {
 			network.teardown();
 			network = null;

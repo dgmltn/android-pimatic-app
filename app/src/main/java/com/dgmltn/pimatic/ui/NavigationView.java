@@ -104,7 +104,6 @@ public class NavigationView extends android.support.design.widget.NavigationView
 					ConnectionOptions conOpts = ConnectionOptions.fromAccount(am, account);
 					ConnectionOptions.toSettings(conOpts, getContext());
 					Model.getInstance().configureNetwork(conOpts);
-					Events.post(new Events.AccountsChanged());
 					closeDrawer();
 					break;
 				}
@@ -149,6 +148,11 @@ public class NavigationView extends android.support.design.widget.NavigationView
 
 	@Subscribe
 	public void otto(Events.AccountsChanged e) {
+		bind();
+	}
+
+	@Subscribe
+	public void otto(Events.NetworkChanged e) {
 		bind();
 	}
 
@@ -236,8 +240,6 @@ public class NavigationView extends android.support.design.widget.NavigationView
 				catch (AuthenticatorException e) {
 					e.printStackTrace();
 				}
-
-				Events.post(new Events.AccountsChanged());
 			}
 		}, null);
 	}
