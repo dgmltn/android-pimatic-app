@@ -29,14 +29,16 @@ import timber.log.Timber;
 public class Network {
 	private ConnectionOptions connection;
 
-	public Network(ConnectionOptions connection) {
-		this.connection = connection;
+	public Network(ConnectionOptions cxn) {
+		connection = cxn;
 		downloadDevices();
-		downloadPages();
-		downloadGroups();
-		//downloadConfig();
-		//TODO: downloadRules();
-		//TODO: downloadVariables();
+
+		//downloadPages();
+		//downloadGroups();
+		downloadConfig();
+
+		//downloadRules();
+		//downloadVariables();
 		setupWebsocket();
 	}
 
