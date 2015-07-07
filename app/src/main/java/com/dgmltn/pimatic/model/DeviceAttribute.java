@@ -9,9 +9,10 @@ public class DeviceAttribute {
 	public String unit;
 	public String label;
 	public String acronym;
-	boolean discrete;
+	public boolean discrete;
+	public boolean hidden;
 	public String name;
 	public String value;
 	public DeviceAttributeValue[] history;
-	long lastUpdate;
+	public long lastUpdate;
 }

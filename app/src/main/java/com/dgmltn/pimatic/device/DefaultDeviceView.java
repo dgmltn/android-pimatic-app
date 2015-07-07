@@ -96,6 +96,9 @@ public class DefaultDeviceView extends DeviceView {
 		SpannableBuilder builder = new SpannableBuilder(context);
 
 		for (DeviceAttribute attr : device.attributes) {
+			if (attr.hidden) {
+				continue;
+			}
 			if (!TextUtils.isEmpty(attr.acronym)) {
 				builder.append(attr.acronym.toUpperCase() + "\u00A0",
 					new StyleSpan(android.graphics.Typeface.BOLD),
