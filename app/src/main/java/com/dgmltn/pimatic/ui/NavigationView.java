@@ -10,6 +10,9 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dgmltn.pimatic.R;
@@ -46,6 +50,9 @@ public class NavigationView extends android.support.design.widget.NavigationView
 
 	@InjectView(R.id.username)
 	public TextView vUsername;
+
+	@InjectView(R.id.arrow)
+	public ImageView vArrow;
 
 	private boolean isDisplayingAccounts;
 
@@ -166,7 +173,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		bind();
 	}
 
-	@OnClick(R.id.nav_header)
+	@OnClick(R.id.username_arrow_layout)
 	public void headerOnClick() {
 		isDisplayingAccounts = !isDisplayingAccounts;
 		bind();
@@ -177,6 +184,14 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		menu.clear();
 
 		vUsername.setText(Model.getInstance().getConnection().getAccountName());
+
+		vArrow.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+		if (isDisplayingAccounts && vArrow.getRotationX() != 180f) {
+			vArrow.animate().rotationX(180f).start();
+		}
+		if (!isDisplayingAccounts && vArrow.getRotationX() != 0f) {
+			vArrow.animate().rotationX(0f).start();
+		}
 
 		if (isDisplayingAccounts) {
 			inflateMenu(R.menu.drawer_accounts);

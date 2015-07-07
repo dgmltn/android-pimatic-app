@@ -22,16 +22,32 @@
     android:layout_width="match_parent"
     android:layout_height="192dp"
     android:background="?attr/colorPrimaryDark"
-    android:padding="16dp"
+    android:padding="8dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
     android:gravity="bottom">
 
-    <TextView
-        android:id="@+id/username"
+    <LinearLayout
+        android:id="@+id/username_arrow_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="demo@demo.pimatic.org"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        style="@style/Widget.AppCompat.Button.Borderless">
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="demo@demo.pimatic.org" />
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_menu_down" />
+
+    </LinearLayout>
 
 </LinearLayout>
