@@ -7,28 +7,13 @@
     android:padding="8dp"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@android:id/text1"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
-
-        <TextView
-            android:id="@android:id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="16sp"
-            tools:text="My Device"/>
-
-        <TextView
-            android:id="@+id/template"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="right"
-            android:layout_weight="1"
-            tools:text="thermostat"/>
-
-    </LinearLayout>
+        android:layout_height="48dp"
+        android:gravity="left|center_vertical"
+        android:textSize="16sp"
+        tools:text="My Device"/>
 
     <TextView
         android:id="@+id/attributes"

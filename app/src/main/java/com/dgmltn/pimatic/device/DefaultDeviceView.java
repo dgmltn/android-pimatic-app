@@ -33,9 +33,6 @@ public class DefaultDeviceView extends DeviceView {
 	@InjectView(android.R.id.text1)
 	TextView vText;
 
-	@InjectView(R.id.template)
-	TextView vTemplate;
-
 	@InjectView(R.id.attributes)
 	TextView vAttributes;
 
@@ -87,7 +84,6 @@ public class DefaultDeviceView extends DeviceView {
 
 	public void bind() {
 		vText.setText(device.name);
-		vTemplate.setText(device.template);
 		vAttributes.setText(getSpannedString(getContext()));
 	}
 
