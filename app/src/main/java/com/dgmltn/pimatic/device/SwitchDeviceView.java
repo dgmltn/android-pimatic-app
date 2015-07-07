@@ -6,6 +6,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,10 +75,9 @@ public class SwitchDeviceView extends DeviceView {
 		ButterKnife.inject(v);
 
 		// Respond to switches by emitting the desired state
-		vSwitch.setOnClickListener(new OnClickListener() {
+		vSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
-			public void onClick(View v) {
-				Toast.makeText(v.getContext(), "clicked!", Toast.LENGTH_SHORT).show();
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				pushDeviceState(vSwitch.isChecked());
 			}
 		});
