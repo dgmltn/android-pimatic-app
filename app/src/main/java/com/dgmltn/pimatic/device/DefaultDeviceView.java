@@ -5,14 +5,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dgmltn.pimatic.R;
@@ -104,6 +102,16 @@ public class DefaultDeviceView extends DeviceView {
 			if (TextUtils.isEmpty(attr.value)) {
 				builder.append(context.getString(R.string.Unknown),
 					new ForegroundColorSpan(Color.GRAY));
+			}
+			else if (attr.type.equals("number")) {
+				double d = Double.parseDouble(attr.value);
+				if (d == (long) d) {
+					builder.append(attr.value);
+				}
+				else {
+					d = Math.round(d * 1000) / 1000d;
+					builder.append(Double.toString(d));
+				}
 			}
 			else {
 				builder.append(attr.value);
