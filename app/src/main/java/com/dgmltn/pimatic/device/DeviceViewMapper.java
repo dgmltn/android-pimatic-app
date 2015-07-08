@@ -22,6 +22,7 @@ public class DeviceViewMapper {
 				SwitchDeviceView.matcher,
 				DimmerDeviceView.matcher,
 				PresenceDeviceView.matcher,
+				ContactDeviceView.matcher,
 				ButtonsDeviceView.matcher,
 				ShutterDeviceView.matcher,
 				DefaultDeviceView.matcher

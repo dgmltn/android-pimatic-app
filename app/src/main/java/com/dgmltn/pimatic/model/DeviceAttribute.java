@@ -8,6 +8,7 @@ public class DeviceAttribute {
 	public String type;
 	public String unit;
 	public String label;
+	public String[] labels;
 	public String acronym;
 	public boolean discrete;
 	public boolean hidden;
