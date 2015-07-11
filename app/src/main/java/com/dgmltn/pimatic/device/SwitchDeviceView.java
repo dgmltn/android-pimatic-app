@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -17,8 +16,8 @@ import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -28,10 +27,10 @@ import retrofit.client.Response;
  */
 public class SwitchDeviceView extends DeviceView {
 
-	@InjectView(R.id.device_name)
+	@Bind(R.id.device_name)
 	TextView vName;
 
-	@InjectView(R.id.device_content)
+	@Bind(R.id.device_content)
 	SwitchCompat vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
@@ -66,7 +65,7 @@ public class SwitchDeviceView extends DeviceView {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 
 		// Respond to switches by emitting the desired state
 		vContent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -110,15 +109,15 @@ public class SwitchDeviceView extends DeviceView {
 		String action = isChecked ? "turnOn" : "turnOff";
 		Model.getInstance().getNetwork().getRest()
 			.deviceAction(device.id, action, new Callback<ActionResponse>() {
-			@Override
-			public void success(ActionResponse actionResponse, Response response) {
-				//TODO
-			}
+				@Override
+				public void success(ActionResponse actionResponse, Response response) {
+					//TODO
+				}
 
-			@Override
-			public void failure(RetrofitError error) {
-				//TODO
-			}
-		});
+				@Override
+				public void failure(RetrofitError error) {
+					//TODO
+				}
+			});
 	}
 }

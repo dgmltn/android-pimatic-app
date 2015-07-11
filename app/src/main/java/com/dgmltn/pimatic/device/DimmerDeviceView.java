@@ -15,8 +15,8 @@ import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -27,10 +27,10 @@ import timber.log.Timber;
  */
 public class DimmerDeviceView extends DeviceView {
 
-	@InjectView(R.id.device_name)
+	@Bind(R.id.device_name)
 	TextView vName;
 
-	@InjectView(R.id.seek)
+	@Bind(R.id.seek)
 	SeekBar vSeek;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
@@ -65,7 +65,7 @@ public class DimmerDeviceView extends DeviceView {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 		vSeek.setMax(100);
 		vSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -110,17 +110,17 @@ public class DimmerDeviceView extends DeviceView {
 	private void pushDimlevel(int to) {
 		Model.getInstance().getNetwork().getRest()
 			.changeDimlevelTo(device.id, to, new Callback<ActionResponse>() {
-			@Override
-			public void success(ActionResponse actionResponse, Response response) {
-				//TODO
-			}
+				@Override
+				public void success(ActionResponse actionResponse, Response response) {
+					//TODO
+				}
 
-			@Override
-			public void failure(RetrofitError error) {
-				//TODO
-				Timber.e(error.toString());
-			}
-		});
+				@Override
+				public void failure(RetrofitError error) {
+					//TODO
+					Timber.e(error.toString());
+				}
+			});
 
 	}
 }

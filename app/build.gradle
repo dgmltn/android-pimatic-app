@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        // For Butter Knife
+        disable 'InvalidPackage'
+    }
+
 }
 
 dependencies {
@@ -30,7 +36,7 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
 
     // http://jakewharton.github.io/butterknife/
-    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
 
     // http://socket.io/blog/native-socket-io-and-android/
     compile 'com.github.nkzawa:socket.io-client:0.5.0'

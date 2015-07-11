@@ -29,28 +29,28 @@ import com.dgmltn.pimatic.ui.PageView;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity {
 
-	@InjectView(R.id.toolbar)
+	@Bind(R.id.toolbar)
 	Toolbar vToolbar;
 
-	@InjectView(R.id.drawer_layout)
+	@Bind(R.id.drawer_layout)
 	DrawerLayout vDrawerLayout;
 
-	@InjectView(R.id.tabs)
+	@Bind(R.id.tabs)
 	TabLayout vTabLayout;
 
-	@InjectView(R.id.viewpager)
+	@Bind(R.id.viewpager)
 	ViewPager vPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 
 		setSupportActionBar(vToolbar);
 

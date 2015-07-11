@@ -10,7 +10,6 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -31,8 +30,8 @@ import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import timber.log.Timber;
 
@@ -48,10 +47,10 @@ public class NavigationView extends android.support.design.widget.NavigationView
 	// drawer_view.xml or drawer_accounts.xml)
 	private static final int GROUP_START_ID = 1;
 
-	@InjectView(R.id.username)
+	@Bind(R.id.username)
 	public TextView vUsername;
 
-	@InjectView(R.id.arrow)
+	@Bind(R.id.arrow)
 	public ImageView vArrow;
 
 	private boolean isDisplayingAccounts;
@@ -79,7 +78,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 	}
 
 	@Override

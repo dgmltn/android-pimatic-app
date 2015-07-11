@@ -22,8 +22,8 @@ import com.dgmltn.pimatic.network.ConnectionOptions;
 import com.dgmltn.pimatic.network.Network;
 import com.dgmltn.pimatic.util.Events;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import retrofit.Callback;
@@ -40,22 +40,22 @@ public class PimaticAccountAuthenticatorActivity extends AppCompatAccountAuthent
 
 	private final String TAG = this.getClass().getSimpleName();
 
-	@InjectView(R.id.preview)
+	@Bind(R.id.preview)
 	TextView vPreview;
 
-	@InjectView(R.id.ssl)
+	@Bind(R.id.ssl)
 	CheckBox vSsl;
 
-	@InjectView(R.id.host)
+	@Bind(R.id.host)
 	public EditText vHost;
 
-	@InjectView(R.id.port)
+	@Bind(R.id.port)
 	public EditText vPort;
 
-	@InjectView(R.id.username)
+	@Bind(R.id.username)
 	public EditText vUsername;
 
-	@InjectView(R.id.password)
+	@Bind(R.id.password)
 	public EditText vPassword;
 
 	private AccountManager mAccountManager;
@@ -68,7 +68,7 @@ public class PimaticAccountAuthenticatorActivity extends AppCompatAccountAuthent
 		super.onCreate(savedInstanceState);
 		Timber.v("onCreate");
 		setContentView(R.layout.activity_account);
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			Window window = getWindow();
@@ -142,8 +142,8 @@ public class PimaticAccountAuthenticatorActivity extends AppCompatAccountAuthent
 	private void updatePreview() {
 		vPreview.setText(
 			(vSsl.isChecked() ? "https://" : "http://")
-			+ (TextUtils.isEmpty(vHost.getText()) ? vHost.getHint() : vHost.getText())
-			+ ":" + (TextUtils.isEmpty(vPort.getText()) ? vPort.getHint() : vPort.getText())
+				+ (TextUtils.isEmpty(vHost.getText()) ? vHost.getHint() : vHost.getText())
+				+ ":" + (TextUtils.isEmpty(vPort.getText()) ? vPort.getHint() : vPort.getText())
 		);
 	}
 

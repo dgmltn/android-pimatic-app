@@ -17,8 +17,8 @@ import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -29,10 +29,10 @@ import timber.log.Timber;
  */
 public class ButtonsDeviceView extends DeviceView implements View.OnClickListener {
 
-	@InjectView(R.id.device_name)
+	@Bind(R.id.device_name)
 	TextView vName;
 
-	@InjectView(R.id.device_content)
+	@Bind(R.id.device_content)
 	ViewGroup vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
@@ -42,7 +42,9 @@ public class ButtonsDeviceView extends DeviceView implements View.OnClickListene
 		}
 
 		@Override
-		public @LayoutRes int getLayoutResId() {
+		public
+		@LayoutRes
+		int getLayoutResId() {
 			return R.layout.view_buttons_device;
 		}
 	};
@@ -67,7 +69,7 @@ public class ButtonsDeviceView extends DeviceView implements View.OnClickListene
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 	}
 
 	@Subscribe

@@ -14,8 +14,8 @@ import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -27,13 +27,13 @@ import timber.log.Timber;
  */
 public class ShutterDeviceView extends DeviceView {
 
-	@InjectView(R.id.device_name)
+	@Bind(R.id.device_name)
 	TextView vName;
 
-	@InjectView(R.id.up)
+	@Bind(R.id.up)
 	ToggleButton vUp;
 
-	@InjectView(R.id.down)
+	@Bind(R.id.down)
 	ToggleButton vDown;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
@@ -68,7 +68,7 @@ public class ShutterDeviceView extends DeviceView {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 	}
 
 	@Subscribe

@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,18 +13,18 @@ import com.dgmltn.pimatic.model.DeviceAttribute;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by doug on 6/7/15.
  */
 public class PresenceDeviceView extends DeviceView {
 
-	@InjectView(R.id.device_name)
+	@Bind(R.id.device_name)
 	TextView vName;
 
-	@InjectView(R.id.device_content)
+	@Bind(R.id.device_content)
 	View vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
@@ -35,7 +34,9 @@ public class PresenceDeviceView extends DeviceView {
 		}
 
 		@Override
-		public @LayoutRes int getLayoutResId() {
+		public
+		@LayoutRes
+		int getLayoutResId() {
 			return R.layout.view_presence_device;
 		}
 	};
@@ -60,7 +61,7 @@ public class PresenceDeviceView extends DeviceView {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 	}
 
 	@Subscribe

@@ -30,8 +30,8 @@ import com.dgmltn.pimatic.device.DeviceView;
 import com.dgmltn.pimatic.device.DeviceViewMapper;
 import com.dgmltn.pimatic.model.Device;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class DeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -119,13 +119,13 @@ public class DeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 	}
 
 	class GroupViewHolder extends RecyclerView.ViewHolder {
-		@InjectView(android.R.id.text1)
+		@Bind(android.R.id.text1)
 		TextView text;
 
 		public GroupViewHolder(ViewGroup parent) {
 			super(inflater.inflate(R.layout.row_group, parent, false));
 
-			ButterKnife.inject(this, itemView);
+			ButterKnife.bind(this, itemView);
 		}
 	}
 }

@@ -9,8 +9,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TextView;
 
 import com.dgmltn.pimatic.R;
@@ -20,19 +18,18 @@ import com.dgmltn.pimatic.util.Events;
 import com.dgmltn.pimatic.util.SpannableBuilder;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created by doug on 6/6/15.
  */
 public class DefaultDeviceView extends DeviceView {
 
-	@InjectView(R.id.device_name)
+	@Bind(R.id.device_name)
 	TextView vName;
 
-	@InjectView(R.id.device_content)
+	@Bind(R.id.device_content)
 	TextView vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
@@ -69,7 +66,7 @@ public class DefaultDeviceView extends DeviceView {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 	}
 
 	@Override
