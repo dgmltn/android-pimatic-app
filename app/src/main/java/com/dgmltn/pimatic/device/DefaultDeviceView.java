@@ -133,7 +133,6 @@ public class DefaultDeviceView extends DeviceView {
 		vContent.setText(getSpannedString(getContext()));
 	}
 
-
 	public SpannableStringBuilder getSpannedString(Context context) {
 		SpannableBuilder builder = new SpannableBuilder(context);
 
@@ -141,6 +140,9 @@ public class DefaultDeviceView extends DeviceView {
 			if (attr.hidden) {
 				continue;
 			}
+
+			String unit = attr.unit;
+
 			if (!TextUtils.isEmpty(attr.acronym)) {
 				builder.append(attr.acronym.toUpperCase() + "\u00A0",
 					new StyleSpan(android.graphics.Typeface.BOLD),
@@ -153,25 +155,32 @@ public class DefaultDeviceView extends DeviceView {
 			}
 			else if (attr.type.equals("number")) {
 				double d = Double.parseDouble(attr.value);
-				if (d == (long) d) {
-					builder.append(attr.value);
+				d = Math.round(d * 100) / 100d;
+				if (attr.unit.equals("B")) {
+					long bytes = (long) d;
+					int base = 1000;
+					if (bytes < base) {
+						builder.append(attr.value);
+					}
+					else {
+						// http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
+						int exp = (int) (Math.log(bytes) / Math.log(base));
+						unit = "KMGTPE".charAt(exp - 1) + "B";
+						builder.append(String.format("%.2f", bytes / Math.pow(base, exp)));
+					}
 				}
 				else {
-					d = Math.round(d * 1000) / 1000d;
 					builder.append(Double.toString(d));
 				}
 			}
 			else {
 				builder.append(attr.value);
 			}
-			if (!TextUtils.isEmpty(attr.unit)) {
-				builder.append(attr.unit,
-					new ForegroundColorSpan(Color.GRAY));
+			if (!TextUtils.isEmpty(unit)) {
+				builder.append(unit, new ForegroundColorSpan(Color.GRAY));
 			}
 			builder.append(" ");
 		}
 		return builder.build();
 	}
-
-
 }
