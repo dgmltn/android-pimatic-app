@@ -2,17 +2,16 @@ package com.dgmltn.pimatic.device;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
-import com.dgmltn.pimatic.model.DeviceAttribute;
 import com.dgmltn.pimatic.model.DeviceButton;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.util.Events;
@@ -20,7 +19,6 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -31,11 +29,11 @@ import timber.log.Timber;
  */
 public class ButtonsDeviceView extends DeviceView implements View.OnClickListener {
 
-	@InjectView(android.R.id.text1)
-	TextView vText;
+	@InjectView(R.id.device_name)
+	TextView vName;
 
-	@InjectView(R.id.buttons)
-	ViewGroup vButtons;
+	@InjectView(R.id.device_content)
+	ViewGroup vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
 		@Override
@@ -44,38 +42,32 @@ public class ButtonsDeviceView extends DeviceView implements View.OnClickListene
 		}
 
 		@Override
-		public DeviceView create(Context context) {
-			return new ButtonsDeviceView(context);
+		public @LayoutRes int getLayoutResId() {
+			return R.layout.view_buttons_device;
 		}
 	};
 
 	public ButtonsDeviceView(Context context) {
 		super(context);
-		init();
 	}
 
 	public ButtonsDeviceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
 	}
 
 	public ButtonsDeviceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
 	}
 
 	@TargetApi(21)
 	public ButtonsDeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
 	}
 
-	private void init() {
-		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_buttons_device, this);
-		ButterKnife.inject(v);
-		if (device != null) {
-			bind();
-		}
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		ButterKnife.inject(this);
 	}
 
 	@Subscribe
@@ -85,15 +77,15 @@ public class ButtonsDeviceView extends DeviceView implements View.OnClickListene
 
 	@Override
 	public void bind() {
-		vText.setText(device.name);
-		vButtons.removeAllViews();
+		vName.setText(device.name);
+		vContent.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		for (DeviceButton b : device.config.buttons) {
-			TextView v = (TextView) inflater.inflate(R.layout.view_button, vButtons, false);
+			TextView v = (TextView) inflater.inflate(R.layout.view_button, vContent, false);
 			v.setText(b.text);
 			v.setTag(b.id);
 			v.setOnClickListener(this);
-			vButtons.addView(v);
+			vContent.addView(v);
 		}
 	}
 

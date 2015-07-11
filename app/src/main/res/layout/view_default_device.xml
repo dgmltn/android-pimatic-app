@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.dgmltn.pimatic.device.DefaultDeviceView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="vertical">
+    android:padding="@dimen/device_padding">
 
     <TextView
-        android:id="@android:id/text1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:gravity="left|center_vertical"
+        android:id="@id/device_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
         android:textSize="16sp"
         tools:text="My Device"/>
 
     <TextView
-        android:id="@+id/attributes"
-        android:layout_width="match_parent"
+        android:id="@id/device_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
         android:textSize="16sp"
-        android:gravity="end|top" />
+        android:gravity="end" />
 
-</LinearLayout>
+</com.dgmltn.pimatic.device.DefaultDeviceView>

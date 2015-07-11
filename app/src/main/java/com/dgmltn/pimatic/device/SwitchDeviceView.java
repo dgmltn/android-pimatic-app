@@ -7,16 +7,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
 import com.dgmltn.pimatic.model.Model;
-import com.dgmltn.pimatic.network.Network;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
@@ -31,11 +28,11 @@ import retrofit.client.Response;
  */
 public class SwitchDeviceView extends DeviceView {
 
-	@InjectView(android.R.id.text1)
-	TextView vText;
+	@InjectView(R.id.device_name)
+	TextView vName;
 
-	@InjectView(R.id.switch_view)
-	SwitchCompat vSwitch;
+	@InjectView(R.id.device_content)
+	SwitchCompat vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
 		@Override
@@ -44,41 +41,38 @@ public class SwitchDeviceView extends DeviceView {
 		}
 
 		@Override
-		public DeviceView create(Context context) {
-			return new SwitchDeviceView(context);
+		public int getLayoutResId() {
+			return R.layout.view_switch_device;
 		}
 	};
 
 	public SwitchDeviceView(Context context) {
 		super(context);
-		init();
 	}
 
 	public SwitchDeviceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
 	}
 
 	public SwitchDeviceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
 	}
 
 	@TargetApi(21)
 	public SwitchDeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
 	}
 
-	private void init() {
-		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_switch_device, this);
-		ButterKnife.inject(v);
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		ButterKnife.inject(this);
 
 		// Respond to switches by emitting the desired state
-		vSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		vContent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				pushDeviceState(vSwitch.isChecked());
+				pushDeviceState(vContent.isChecked());
 			}
 		});
 
@@ -86,7 +80,7 @@ public class SwitchDeviceView extends DeviceView {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				vSwitch.performClick();
+				vContent.performClick();
 
 			}
 		});
@@ -99,8 +93,8 @@ public class SwitchDeviceView extends DeviceView {
 
 	@Override
 	public void bind() {
-		vText.setText(device.name);
-		vSwitch.setChecked(getDeviceState());
+		vName.setText(device.name);
+		vContent.setChecked(getDeviceState());
 	}
 
 	private boolean getDeviceState() {

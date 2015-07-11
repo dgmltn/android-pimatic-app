@@ -3,8 +3,6 @@ package com.dgmltn.pimatic.device;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,7 +12,6 @@ import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
 import com.dgmltn.pimatic.model.Model;
-import com.dgmltn.pimatic.network.Network;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
@@ -30,8 +27,8 @@ import timber.log.Timber;
  */
 public class DimmerDeviceView extends DeviceView {
 
-	@InjectView(android.R.id.text1)
-	TextView vText;
+	@InjectView(R.id.device_name)
+	TextView vName;
 
 	@InjectView(R.id.seek)
 	SeekBar vSeek;
@@ -43,35 +40,32 @@ public class DimmerDeviceView extends DeviceView {
 		}
 
 		@Override
-		public DeviceView create(Context context) {
-			return new DimmerDeviceView(context);
+		public int getLayoutResId() {
+			return R.layout.view_dimmer_device;
 		}
 	};
 
 	public DimmerDeviceView(Context context) {
 		super(context);
-		init();
 	}
 
 	public DimmerDeviceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
 	}
 
 	public DimmerDeviceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
 	}
 
 	@TargetApi(21)
 	public DimmerDeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
 	}
 
-	private void init() {
-		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_dimmer_device, this);
-		ButterKnife.inject(v);
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		ButterKnife.inject(this);
 		vSeek.setMax(100);
 		vSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -100,7 +94,7 @@ public class DimmerDeviceView extends DeviceView {
 
 	@Override
 	public void bind() {
-		vText.setText(device.name);
+		vName.setText(device.name);
 		vSeek.setProgress(getDeviceDimlevel());
 	}
 

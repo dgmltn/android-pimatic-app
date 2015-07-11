@@ -21,11 +21,11 @@ import butterknife.InjectView;
  */
 public class ContactDeviceView extends DeviceView {
 
-	@InjectView(android.R.id.text1)
-	TextView vText;
+	@InjectView(R.id.device_name)
+	TextView vName;
 
-	@InjectView(R.id.state)
-	TextView vState;
+	@InjectView(R.id.device_content)
+	TextView vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
 		@Override
@@ -34,35 +34,32 @@ public class ContactDeviceView extends DeviceView {
 		}
 
 		@Override
-		public DeviceView create(Context context) {
-			return new ContactDeviceView(context);
+		public int getLayoutResId() {
+			return R.layout.view_contact_device;
 		}
 	};
 
 	public ContactDeviceView(Context context) {
 		super(context);
-		init();
 	}
 
 	public ContactDeviceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
 	}
 
 	public ContactDeviceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
 	}
 
 	@TargetApi(21)
 	public ContactDeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
 	}
 
-	private void init() {
-		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_contact_device, this);
-		ButterKnife.inject(v);
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		ButterKnife.inject(this);
 	}
 
 	@Subscribe
@@ -72,8 +69,8 @@ public class ContactDeviceView extends DeviceView {
 
 	@Override
 	public void bind() {
-		vText.setText(device.name);
-		vState.setText(getDeviceState());
+		vName.setText(device.name);
+		vContent.setText(getDeviceState());
 	}
 
 	private String getDeviceState() {

@@ -1,6 +1,9 @@
 package com.dgmltn.pimatic.device;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import com.dgmltn.pimatic.model.Device;
 
@@ -9,9 +12,17 @@ import com.dgmltn.pimatic.model.Device;
  */
 public class DeviceViewMapper {
 
-	public interface Matcher {
-		boolean matches(Device d);
-		DeviceView create(Context context);
+	public abstract static class Matcher {
+
+		public abstract boolean matches(Device d);
+
+		public abstract	@LayoutRes int getLayoutResId();
+
+		public DeviceView inflate(ViewGroup parent) {
+			LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+			@LayoutRes int layoutResId = getLayoutResId();
+			return (DeviceView) inflater.inflate(layoutResId, parent, false);
+		}
 	}
 
 	private static Matcher[] matchers;
@@ -40,7 +51,7 @@ public class DeviceViewMapper {
 		return -1;
 	}
 
-	public static DeviceView instantiate(Context context, int index) {
-		return matchers[index].create(context);
+	public static DeviceView instantiate(ViewGroup parent, int index) {
+		return matchers[index].inflate(parent);
 	}
 }

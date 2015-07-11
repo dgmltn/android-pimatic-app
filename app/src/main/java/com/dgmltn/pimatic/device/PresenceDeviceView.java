@@ -2,6 +2,7 @@ package com.dgmltn.pimatic.device;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +22,11 @@ import butterknife.InjectView;
  */
 public class PresenceDeviceView extends DeviceView {
 
-	@InjectView(android.R.id.text1)
-	TextView vText;
+	@InjectView(R.id.device_name)
+	TextView vName;
 
-	@InjectView(R.id.indicator)
-	View vIndicator;
+	@InjectView(R.id.device_content)
+	View vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
 		@Override
@@ -34,35 +35,32 @@ public class PresenceDeviceView extends DeviceView {
 		}
 
 		@Override
-		public DeviceView create(Context context) {
-			return new PresenceDeviceView(context);
+		public @LayoutRes int getLayoutResId() {
+			return R.layout.view_presence_device;
 		}
 	};
 
 	public PresenceDeviceView(Context context) {
 		super(context);
-		init();
 	}
 
 	public PresenceDeviceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
 	}
 
 	public PresenceDeviceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
 	}
 
 	@TargetApi(21)
 	public PresenceDeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
 	}
 
-	private void init() {
-		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_presence_device, this);
-		ButterKnife.inject(v);
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		ButterKnife.inject(this);
 	}
 
 	@Subscribe
@@ -72,8 +70,8 @@ public class PresenceDeviceView extends DeviceView {
 
 	@Override
 	public void bind() {
-		vText.setText(device.name);
-		vIndicator.setEnabled(getDeviceState());
+		vName.setText(device.name);
+		vContent.setEnabled(getDeviceState());
 	}
 
 	private boolean getDeviceState() {

@@ -3,10 +3,6 @@ package com.dgmltn.pimatic.device;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -14,7 +10,6 @@ import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
 import com.dgmltn.pimatic.model.DeviceAttribute;
-import com.dgmltn.pimatic.model.DeviceButton;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
@@ -32,8 +27,8 @@ import timber.log.Timber;
  */
 public class ShutterDeviceView extends DeviceView {
 
-	@InjectView(android.R.id.text1)
-	TextView vText;
+	@InjectView(R.id.device_name)
+	TextView vName;
 
 	@InjectView(R.id.up)
 	ToggleButton vUp;
@@ -48,38 +43,32 @@ public class ShutterDeviceView extends DeviceView {
 		}
 
 		@Override
-		public DeviceView create(Context context) {
-			return new ShutterDeviceView(context);
+		public int getLayoutResId() {
+			return R.layout.view_shutter_device;
 		}
 	};
 
 	public ShutterDeviceView(Context context) {
 		super(context);
-		init();
 	}
 
 	public ShutterDeviceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
 	}
 
 	public ShutterDeviceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
 	}
 
 	@TargetApi(21)
 	public ShutterDeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
 	}
 
-	private void init() {
-		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_shutter_device, this);
-		ButterKnife.inject(v);
-		if (device != null) {
-			bind();
-		}
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		ButterKnife.inject(this);
 	}
 
 	@Subscribe
@@ -103,7 +92,7 @@ public class ShutterDeviceView extends DeviceView {
 
 	@Override
 	public void bind() {
-		vText.setText(device.name);
+		vName.setText(device.name);
 		String state = getDeviceState();
 		vUp.setChecked(state.equals("up"));
 		vDown.setChecked(state.equals("down"));

@@ -114,12 +114,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 	class DeviceViewHolder extends RecyclerView.ViewHolder {
 
 		public DeviceViewHolder(ViewGroup parent, int viewType) {
-			super(DeviceViewMapper.instantiate(parent.getContext(), viewType - 1));
-
-			ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-			itemView.setLayoutParams(lp);
-			itemView.setBackgroundResource(mBackground);
+			super(DeviceViewMapper.instantiate(parent, viewType - 1));
 		}
 	}
 

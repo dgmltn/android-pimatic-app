@@ -22,56 +22,107 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by doug on 6/6/15.
  */
 public class DefaultDeviceView extends DeviceView {
 
-	@InjectView(android.R.id.text1)
-	TextView vText;
+	@InjectView(R.id.device_name)
+	TextView vName;
 
-	@InjectView(R.id.attributes)
-	TextView vAttributes;
+	@InjectView(R.id.device_content)
+	TextView vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
+
 		@Override
 		public boolean matches(Device d) {
 			return true;
 		}
 
 		@Override
-		public DeviceView create(Context context) {
-			return new DefaultDeviceView(context);
+		public int getLayoutResId() {
+			return R.layout.view_default_device;
 		}
+
 	};
 
 	public DefaultDeviceView(Context context) {
 		super(context);
-		init();
 	}
 
 	public DefaultDeviceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
 	}
 
 	public DefaultDeviceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
 	}
 
 	@TargetApi(21)
 	public DefaultDeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
 	}
 
-	private void init() {
-		View v = LayoutInflater.from(getContext()).inflate(R.layout.view_default_device, this);
-		ButterKnife.inject(v);
-		if (device != null) {
-			bind();
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		ButterKnife.inject(this);
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+		int nameWidth = vName.getMeasuredWidth();
+		int nameHeight = vName.getMeasuredHeight();
+		int contWidth = vContent.getMeasuredWidth();
+		int contHeight = vContent.getMeasuredHeight();
+		int availWidth = MeasureSpec.getSize(widthMeasureSpec);
+
+		int w = MeasureSpec.getSize(widthMeasureSpec);
+		int h = nameWidth + contWidth < availWidth
+			? nameHeight + getPaddingTop() + getPaddingBottom()
+			: nameHeight + contHeight + getPaddingTop() + getPaddingBottom();
+
+		setMeasuredDimension(
+			MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY),
+			MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY)
+		);
+	}
+
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		int nameWidth = vName.getMeasuredWidth();
+		int contWidth = vContent.getMeasuredWidth();
+		int availWidth = right - left;
+
+		// This is the collapsed row -- everything on the same line
+		if (nameWidth + contWidth < availWidth) {
+			final int parentTop = getPaddingTop();
+			final int parentBottom = bottom - top - getPaddingBottom();
+			final int parentHeight = parentBottom - parentTop;
+
+			// Layout Name left + vertically centered
+			int l = getPaddingLeft();
+			int r = l + vName.getMeasuredWidth();
+			int t = (parentHeight - vName.getMeasuredHeight()) / 2 + parentTop;
+			int b = t + vName.getMeasuredHeight();
+			vName.layout(l, t, r, b);
+
+			r = right - left - getPaddingRight();
+			l = r - vContent.getMeasuredWidth();
+			t = (parentHeight - vContent.getMeasuredHeight()) / 2 + parentTop;
+			b = t + vContent.getMeasuredHeight();
+			vContent.layout(l, t, r, b);
+		}
+
+		// Don't need to collapse this row, so let's just the normal
+		// FrameLayout layout_gravity layouts
+		else {
+			super.onLayout(changed, left, top, right, bottom);
 		}
 	}
 
@@ -81,8 +132,8 @@ public class DefaultDeviceView extends DeviceView {
 	}
 
 	public void bind() {
-		vText.setText(device.name);
-		vAttributes.setText(getSpannedString(getContext()));
+		vName.setText(device.name);
+		vContent.setText(getSpannedString(getContext()));
 	}
 
 

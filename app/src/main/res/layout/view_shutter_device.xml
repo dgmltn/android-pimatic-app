@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.dgmltn.pimatic.device.ShutterDeviceView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@android:id/text1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:textSize="16sp"
-        tools:text="My Device"/>
+        android:padding="@dimen/device_padding">
 
-    <ToggleButton
-        android:id="@+id/down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOff="@string/Down"
-        android:textOn="@string/Down" />
+        <TextView
+            android:id="@id/device_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            tools:text="My Device"/>
 
-    <ToggleButton
-        android:id="@+id/up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOff="@string/Up"
-        android:textOn="@string/Up" />
+        <ToggleButton
+            android:id="@+id/down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="@string/Down"
+            android:textOn="@string/Down" />
 
-</LinearLayout>
+        <ToggleButton
+            android:id="@+id/up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="@string/Up"
+            android:textOn="@string/Up" />
+
+    </LinearLayout>
+
+</com.dgmltn.pimatic.device.ShutterDeviceView>
