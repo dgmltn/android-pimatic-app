@@ -156,7 +156,7 @@ public class DefaultDeviceView extends DeviceView {
 			else if (attr.type.equals("number")) {
 				double d = Double.parseDouble(attr.value);
 				d = Math.round(d * 100) / 100d;
-				if (attr.unit.equals("B")) {
+				if (attr.unit != null && attr.unit.equals("B")) {
 					long bytes = (long) d;
 					int base = 1000;
 					if (bytes < base) {
