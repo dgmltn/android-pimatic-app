@@ -69,60 +69,6 @@ public class DefaultDeviceView extends DeviceView {
 		ButterKnife.bind(this);
 	}
 
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-		int nameWidth = vName.getMeasuredWidth();
-		int nameHeight = vName.getMeasuredHeight();
-		int contWidth = vContent.getMeasuredWidth();
-		int contHeight = vContent.getMeasuredHeight();
-		int availWidth = MeasureSpec.getSize(widthMeasureSpec);
-
-		int w = MeasureSpec.getSize(widthMeasureSpec);
-		int h = nameWidth + contWidth < availWidth
-			? nameHeight + getPaddingTop() + getPaddingBottom()
-			: nameHeight + contHeight + getPaddingTop() + getPaddingBottom();
-
-		setMeasuredDimension(
-			MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY),
-			MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY)
-		);
-	}
-
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		int nameWidth = vName.getMeasuredWidth();
-		int contWidth = vContent.getMeasuredWidth();
-		int availWidth = right - left;
-
-		// This is the collapsed row -- everything on the same line
-		if (nameWidth + contWidth < availWidth) {
-			final int parentTop = getPaddingTop();
-			final int parentBottom = bottom - top - getPaddingBottom();
-			final int parentHeight = parentBottom - parentTop;
-
-			// Layout Name left + vertically centered
-			int l = getPaddingLeft();
-			int r = l + vName.getMeasuredWidth();
-			int t = (parentHeight - vName.getMeasuredHeight()) / 2 + parentTop;
-			int b = t + vName.getMeasuredHeight();
-			vName.layout(l, t, r, b);
-
-			r = right - left - getPaddingRight();
-			l = r - vContent.getMeasuredWidth();
-			t = (parentHeight - vContent.getMeasuredHeight()) / 2 + parentTop;
-			b = t + vContent.getMeasuredHeight();
-			vContent.layout(l, t, r, b);
-		}
-
-		// Don't need to collapse this row, so let's just the normal
-		// FrameLayout layout_gravity layouts
-		else {
-			super.onLayout(changed, left, top, right, bottom);
-		}
-	}
-
 	@Subscribe
 	public void otto(Events.DeviceChanged e) {
 		super.otto(e);

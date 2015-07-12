@@ -2,37 +2,47 @@
 <com.dgmltn.pimatic.device.ShutterDeviceView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/device_padding">
+        android:layout_height="match_parent"
+        app:cardCornerRadius="4dp"
+        android:layout_margin="5dp">
 
-        <TextView
-            android:id="@id/device_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:textSize="16sp"
-            tools:text="My Device"/>
+            android:padding="@dimen/device_padding">
 
-        <ToggleButton
-            android:id="@+id/down"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOff="@string/Down"
-            android:textOn="@string/Down" />
+            <TextView
+                android:id="@id/device_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
+                tools:text="My Device"/>
 
-        <ToggleButton
-            android:id="@+id/up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOff="@string/Up"
-            android:textOn="@string/Up" />
+            <ToggleButton
+                android:id="@+id/down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/Down"
+                android:textOn="@string/Down" />
 
-    </LinearLayout>
+            <ToggleButton
+                android:id="@+id/up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/Up"
+                android:textOn="@string/Up" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </com.dgmltn.pimatic.device.ShutterDeviceView>

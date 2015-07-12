@@ -31,7 +31,7 @@ public abstract class DeviceView extends FrameLayout {
 
 	@TargetApi(21)
 	public DeviceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
+		super(context, attrs, defStyleAttr);
 	}
 
 	public void setDevice(Device d) {
