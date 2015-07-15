@@ -36,6 +36,7 @@ public class DeviceViewMapper {
 				ContactDeviceView.matcher,
 				ButtonsDeviceView.matcher,
 				ShutterDeviceView.matcher,
+				MediaPlayerDeviceView.matcher,
 				DefaultDeviceView.matcher
 			};
 		}

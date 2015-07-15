@@ -98,8 +98,8 @@ public class SwitchDeviceView extends DeviceView {
 
 	private boolean getDeviceState() {
 		for (DeviceAttribute a : device.attributes) {
-			if (a != null && a.name.equals("state")) {
-				return a.value.equals("true");
+			if (a != null && "state".equals(a.name)) {
+				return "true".equals(a.value);
 			}
 		}
 		return false;
