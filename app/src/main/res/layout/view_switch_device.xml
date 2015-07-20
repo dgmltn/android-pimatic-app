@@ -13,19 +13,22 @@
         app:cardCornerRadius="4dp"
         android:layout_margin="5dp">
 
-        <LinearLayout
+        <com.dgmltn.pimatic.ui.CollapsingFrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/device_padding"
-            android:addStatesFromChildren="true"
-            android:background="?attr/selectableItemBackground">
+            android:paddingTop="@dimen/device_vert_padding"
+            android:paddingBottom="@dimen/device_vert_padding"
+            android:paddingLeft="@dimen/device_horiz_padding"
+            android:paddingRight="@dimen/device_horiz_padding"
+            android:background="?attr/selectableItemBackground"
+            app:paddingSibling="@dimen/device_sibling_padding"
+            app:minHeight="@dimen/device_min_height"
+            >
 
             <TextView
                 android:id="@id/device_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:textSize="16sp"
                 tools:text="My Device"/>
 
@@ -33,10 +36,9 @@
                 android:id="@id/device_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 />
 
-        </LinearLayout>
+        </com.dgmltn.pimatic.ui.CollapsingFrameLayout>
 
     </android.support.v7.widget.CardView>
 

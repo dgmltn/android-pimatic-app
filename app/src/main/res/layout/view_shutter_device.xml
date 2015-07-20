@@ -13,35 +13,49 @@
         app:cardCornerRadius="4dp"
         android:layout_margin="5dp">
 
-        <LinearLayout
+        <com.dgmltn.pimatic.ui.CollapsingFrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/device_padding">
+            android:paddingTop="@dimen/device_vert_padding"
+            android:paddingBottom="@dimen/device_vert_padding"
+            android:paddingLeft="@dimen/device_horiz_padding"
+            android:paddingRight="@dimen/device_horiz_padding"
+            app:paddingSibling="@dimen/device_sibling_padding"
+            app:minHeight="@dimen/device_min_height"
+            >
 
             <TextView
                 android:id="@id/device_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_gravity="center_vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:textSize="16sp"
                 tools:text="My Device"/>
 
-            <ToggleButton
-                android:id="@+id/down"
+            <LinearLayout
+                android:id="@id/device_content"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOff="@string/Down"
-                android:textOn="@string/Down" />
+                android:layout_height="wrap_content">
 
-            <ToggleButton
-                android:id="@+id/up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOff="@string/Up"
-                android:textOn="@string/Up" />
+                <ToggleButton
+                    android:id="@+id/down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="@string/Down"
+                    android:textOn="@string/Down" />
 
-        </LinearLayout>
+                <ToggleButton
+                    android:id="@+id/up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="@string/Up"
+                    android:textOn="@string/Up" />
+
+            </LinearLayout>
+
+        </com.dgmltn.pimatic.ui.CollapsingFrameLayout>
 
     </android.support.v7.widget.CardView>
 

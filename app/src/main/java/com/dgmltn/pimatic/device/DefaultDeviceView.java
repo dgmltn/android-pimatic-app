@@ -96,13 +96,17 @@ public class DefaultDeviceView extends DeviceView {
 					new RelativeSizeSpan(0.8f));
 			}
 			if (TextUtils.isEmpty(attr.value)) {
-				builder.append(context.getString(R.string.Unknown),
-					new ForegroundColorSpan(Color.GRAY));
+				String unknown = context.getString(
+					"number".equals(attr.type)
+						? R.string.unknown_number
+						: R.string.Unknown
+				);
+				builder.append(unknown,	new ForegroundColorSpan(Color.GRAY));
 			}
-			else if (attr.type.equals("number")) {
+			else if ("number".equals(attr.type)) {
 				double d = Double.parseDouble(attr.value);
 				d = Math.round(d * 100) / 100d;
-				if (attr.unit != null && attr.unit.equals("B")) {
+				if (attr.unit != null && "B".equals(attr.unit)) {
 					long bytes = (long) d;
 					int base = 1000;
 					if (bytes < base) {
