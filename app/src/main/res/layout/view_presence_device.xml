@@ -36,6 +36,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="3.5dp"
+                android:elevation="1dp"
                 android:background="@drawable/ic_presence_circle"
                 android:stateListAnimator="@anim/presence_state_list_anim"/>
 

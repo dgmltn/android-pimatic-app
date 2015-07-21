@@ -6,10 +6,6 @@
                 android:duration="@integer/presence_state_anim_duration"
                 android:valueTo="2dp"
                 android:valueType="floatType"/>
-            <objectAnimator android:propertyName="elevation"
-                android:duration="@integer/presence_state_anim_duration"
-                android:valueTo="1dp"
-                android:valueType="floatType"/>
             <objectAnimator android:propertyName="saturation"
                 android:duration="@integer/presence_state_anim_duration"
                 android:valueTo="1.0"
@@ -28,10 +24,6 @@
                 android:duration="@integer/presence_state_anim_duration"
                 android:valueTo="0"
                 android:valueType="floatType"/>
-            <objectAnimator android:propertyName="elevation"
-                android:duration="@integer/presence_state_anim_duration"
-                android:valueTo="1dp"
-                android:valueType="floatType" />
             <objectAnimator android:propertyName="saturation"
                 android:duration="@integer/presence_state_anim_duration"
                 android:valueTo="0.0"

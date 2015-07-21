@@ -2,6 +2,7 @@ package com.dgmltn.pimatic.device;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
@@ -25,7 +26,7 @@ public class PresenceDeviceView extends DeviceView {
 	TextView vName;
 
 	@Bind(R.id.device_content)
-	View vContent;
+	SaturableView vContent;
 
 	public static DeviceViewMapper.Matcher matcher = new DeviceViewMapper.Matcher() {
 		@Override
@@ -69,10 +70,19 @@ public class PresenceDeviceView extends DeviceView {
 		super.otto(e);
 	}
 
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	public void bind() {
 		vName.setText(device.name);
-		vContent.setEnabled(getDeviceState());
+
+		boolean enabled = getDeviceState();
+		vContent.setEnabled(enabled);
+		vContent.setSaturation(enabled ? 1.0f : 0f);
+		vContent.setAlpha(enabled ? 1f : 0.2f);
+		if (Build.VERSION.SDK_INT >= 21) {
+			float density = getResources().getDisplayMetrics().density;
+			vContent.setTranslationZ(enabled ? 2 * density : 0f);
+		}
 	}
 
 	private boolean getDeviceState() {
