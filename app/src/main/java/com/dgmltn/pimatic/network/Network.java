@@ -33,9 +33,16 @@ public class Network {
 		connection = cxn;
 		downloadDevices();
 
+		// downloadGroups is a new Pimatic feature. If it fails
+		// (due to the server not being up to date), we'll resort
+		// to getting both pages and groups via getConfig.
+		// If downloadGroups succeeds, we'll then just also go
+		// ahead with downloadPages next.
+		// In the future, let's just do both downloadGroups and
+		// downloadPages right here.
+		downloadGroups();
 		//downloadPages();
-		//downloadGroups();
-		downloadConfig();
+		//downloadConfig();
 
 		//downloadRules();
 		//downloadVariables();
@@ -149,6 +156,7 @@ public class Network {
 
 	private void downloadPages() {
 		getRest();
+		Timber.i("downloadPages()");
 		rest.getPages(new Callback<PagesResponse>() {
 			@Override
 			public void success(PagesResponse pagesResponse, Response response) {
@@ -171,11 +179,14 @@ public class Network {
 			public void success(GroupsResponse groupsResponse, Response response) {
 				Timber.i("groups: " + new Gson().toJson(groupsResponse.groups));
 				Model.getInstance().setGroups(groupsResponse.groups);
+				downloadPages();
 			}
 
 			@Override
 			public void failure(RetrofitError error) {
 				Timber.e("downloadGroups failure! " + error.getMessage());
+				Timber.e("Resorting to downloadConfig()");
+				downloadConfig();
 			}
 		});
 	}
