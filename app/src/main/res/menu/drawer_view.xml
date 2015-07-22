@@ -23,7 +23,7 @@
         <menu>
             <item
                 android:id="@+id/rules"
-                android:icon="@drawable/ic_rules"
+                android:icon="@drawable/ic_source_fork"
                 android:title="@string/Rules" />
             <item
                 android:id="@+id/variables"
