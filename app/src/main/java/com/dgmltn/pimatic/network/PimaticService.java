@@ -9,6 +9,7 @@ import com.dgmltn.pimatic.model.GroupsResponse;
 import com.dgmltn.pimatic.model.LoginResponse;
 import com.dgmltn.pimatic.model.Message;
 import com.dgmltn.pimatic.model.ConfigResponse;
+import com.dgmltn.pimatic.model.MessagesResponse;
 import com.dgmltn.pimatic.model.PagesResponse;
 import com.dgmltn.pimatic.model.RulesResponse;
 import com.dgmltn.pimatic.model.VariablesResponse;
@@ -29,7 +30,7 @@ public interface PimaticService {
 
 	@GET("/api/database/messages")
 	void getMessages(
-		Callback<List<Message>> callback
+		Callback<MessagesResponse> callback
 	);
 
 	@FormUrlEncoded

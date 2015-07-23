@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import com.dgmltn.pimatic.model.DeviceAttributeChange;
 import com.dgmltn.pimatic.model.DevicesResponse;
 import com.dgmltn.pimatic.model.GroupsResponse;
+import com.dgmltn.pimatic.model.MessagesResponse;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.ConfigResponse;
 import com.dgmltn.pimatic.model.PagesResponse;
@@ -238,6 +239,21 @@ public class Network {
 			@Override
 			public void failure(RetrofitError error) {
 				Timber.e("downloadVariables failure! " + error.getMessage());
+			}
+		});
+	}
+
+	private void downloadMessages() {
+		getRest();
+		rest.getMessages(new Callback<MessagesResponse>() {
+			@Override
+			public void success(MessagesResponse messagesResponse, Response response) {
+
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				Timber.e("downloadMessages failure! " + error.getMessage());
 			}
 		});
 	}
