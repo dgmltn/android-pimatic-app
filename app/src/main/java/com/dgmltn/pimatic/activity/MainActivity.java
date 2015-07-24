@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 			if (view == null) {
 				view = (PageView) LayoutInflater
 					.from(container.getContext())
-					.inflate(R.layout.fragment_page, container, false);
+					.inflate(R.layout.view_page, container, false);
 				view.setPage(Model.getInstance(), p);
 				mViews.set(position, view);
 			}
