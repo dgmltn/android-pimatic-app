@@ -25,7 +25,7 @@ import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
 import com.dgmltn.pimatic.network.ConnectionOptions;
-import com.dgmltn.pimatic.ui.PageView;
+import com.dgmltn.pimatic.ui.PageRecyclerView;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
 
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
 	static class GroupPagerAdapter extends PagerAdapter {
 		private final List<Page> mPages = new ArrayList<>();
-		private final List<PageView> mViews = new ArrayList<>();
+		private final List<PageRecyclerView> mViews = new ArrayList<>();
 
 		@Override
 		public int getCount() {
@@ -248,9 +248,9 @@ public class MainActivity extends AppCompatActivity {
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
 			Page p = mPages.get(position);
-			PageView view = mViews.get(position);
+			PageRecyclerView view = mViews.get(position);
 			if (view == null) {
-				view = (PageView) LayoutInflater
+				view = (PageRecyclerView) LayoutInflater
 					.from(container.getContext())
 					.inflate(R.layout.view_page, container, false);
 				view.setPage(Model.getInstance(), p);
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
 		public boolean isViewFromObject(View view, Object object) {
 			boolean is = object == null || view == null
 				? false
-				: ((Page) object).id.equals(((PageView) view).getPage().id);
+				: ((Page) object).id.equals(((PageRecyclerView) view).getPage().id);
 			return is;
 		}
 

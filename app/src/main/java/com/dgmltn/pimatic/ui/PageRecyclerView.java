@@ -18,23 +18,23 @@ import timber.log.Timber;
 /**
  * Displays a list of Device that are associated with a given Page. This is a RecyclerView
  */
-public class PageView extends RecyclerView {
+public class PageRecyclerView extends RecyclerView {
 
 	private Model mModel;
 	private Page mPage;
 	private DeviceAdapter mAdapter;
 
-	public PageView(Context context) {
+	public PageRecyclerView(Context context) {
 		super(context);
 		init(context);
 	}
 
-	public PageView(Context context, AttributeSet attrs) {
+	public PageRecyclerView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
 
-	public PageView(Context context, AttributeSet attrs, int defStyle) {
+	public PageRecyclerView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
 	}
