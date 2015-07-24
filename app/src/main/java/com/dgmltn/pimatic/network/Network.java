@@ -47,6 +47,7 @@ public class Network {
 
 		//downloadRules();
 		//downloadVariables();
+		downloadMessages();
 		setupWebsocket();
 	}
 
@@ -248,7 +249,8 @@ public class Network {
 		rest.getMessages(new Callback<MessagesResponse>() {
 			@Override
 			public void success(MessagesResponse messagesResponse, Response response) {
-
+				Timber.i("messages: " + new Gson().toJson(messagesResponse.messages));
+				Model.getInstance().setMessages(messagesResponse.messages);
 			}
 
 			@Override

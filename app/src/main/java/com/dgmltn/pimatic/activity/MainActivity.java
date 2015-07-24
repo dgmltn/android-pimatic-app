@@ -25,6 +25,8 @@ import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
 import com.dgmltn.pimatic.model.Page;
 import com.dgmltn.pimatic.network.ConnectionOptions;
+import com.dgmltn.pimatic.ui.MessageAdapter;
+import com.dgmltn.pimatic.ui.MessagesRecyclerView;
 import com.dgmltn.pimatic.ui.PageRecyclerView;
 import com.dgmltn.pimatic.util.Events;
 import com.squareup.otto.Subscribe;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 	View vVariables;
 
 	@Bind(R.id.messages)
-	View vMessages;
+	MessagesRecyclerView vMessages;
 
 	@Bind(R.id.events)
 	View vEvents;
@@ -178,6 +180,9 @@ public class MainActivity extends AppCompatActivity {
 	public void otto(Events.DesiredMessages e) {
 		showSection(SectionType.MESSAGES);
 		vToolbar.setTitle(getString(R.string.Messages));
+		Model model = Model.getInstance();
+		MessageAdapter adapter = vMessages.getAdapter();
+		adapter.set(model.getMessages());
 	}
 
 	@Subscribe

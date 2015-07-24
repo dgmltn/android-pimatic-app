@@ -31,6 +31,7 @@ public class Model {
 			groups = null;
 			pages = null;
 			devices = null;
+			messages = null;
 			connection = null;
 		}
 		detachNetwork();
@@ -183,4 +184,20 @@ public class Model {
 	public Variable[] getVariables() {
 		return variables;
 	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Messages
+	///////////////////////////////////////////////////////////////////////////
+
+	private Message[] messages;
+
+	public void setMessages(Message[] messages) {
+		this.messages = messages;
+		Events.post(new Events.MessagesChanged());
+	}
+
+	public Message[] getMessages() {
+		return messages;
+	}
+
 }

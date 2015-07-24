@@ -53,12 +53,11 @@
             android:text="@string/Variables"/>
 
         <!-- For messages -->
-        <TextView
+        <com.dgmltn.pimatic.ui.MessagesRecyclerView
             android:id="@+id/messages"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/Messages"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <!-- For events -->
         <TextView
