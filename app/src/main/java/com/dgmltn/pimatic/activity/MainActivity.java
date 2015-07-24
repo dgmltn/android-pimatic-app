@@ -46,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
 	@Bind(R.id.viewpager)
 	ViewPager vPager;
 
+	@Bind(R.id.rules)
+	View vRules;
+
+	@Bind(R.id.variables)
+	View vVariables;
+
+	@Bind(R.id.messages)
+	View vMessages;
+
+	@Bind(R.id.events)
+	View vEvents;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 		final ActionBar ab = getSupportActionBar();
 		ab.setHomeAsUpIndicator(R.drawable.ic_menu);
 		ab.setDisplayHomeAsUpEnabled(true);
+
+		showSection(SectionType.PAGER);
+		vToolbar.setTitle(getString(R.string.app_name));
 	}
 
 	@Override
@@ -75,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
 	public void onBackPressed() {
 		if (vDrawerLayout.isDrawerOpen(GravityCompat.START)) {
 			vDrawerLayout.closeDrawer(GravityCompat.START);
+		}
+		else if (vPager.getVisibility() != View.VISIBLE) {
+			showSection(SectionType.PAGER);
 		}
 		else {
 			super.onBackPressed();
@@ -139,8 +157,47 @@ public class MainActivity extends AppCompatActivity {
 
 	@Subscribe
 	public void otto(Events.DesiredGroupTab e) {
-		vDrawerLayout.closeDrawers();
+		showSection(SectionType.PAGER);
 		vPager.setCurrentItem(e.tab, true);
+		vToolbar.setTitle(getString(R.string.app_name));
+	}
+
+	@Subscribe
+	public void otto(Events.DesiredRules e) {
+		showSection(SectionType.RULES);
+		vToolbar.setTitle(getString(R.string.Rules));
+	}
+
+	@Subscribe
+	public void otto(Events.DesiredVariables e) {
+		showSection(SectionType.VARIABLES);
+		vToolbar.setTitle(getString(R.string.Variables));
+	}
+
+	@Subscribe
+	public void otto(Events.DesiredMessages e) {
+		showSection(SectionType.MESSAGES);
+		vToolbar.setTitle(getString(R.string.Messages));
+	}
+
+	@Subscribe
+	public void otto(Events.DesiredEvents e) {
+		showSection(SectionType.EVENTS);
+		vToolbar.setTitle(getString(R.string.Events));
+	}
+
+	private enum SectionType {
+		PAGER, RULES, VARIABLES, MESSAGES, EVENTS
+	}
+
+	private void showSection(SectionType t) {
+		vDrawerLayout.closeDrawers();
+		vPager.setVisibility(t == SectionType.PAGER ? View.VISIBLE : View.GONE);
+		vTabLayout.setVisibility(t == SectionType.PAGER ? View.VISIBLE : View.GONE);
+		vRules.setVisibility(t == SectionType.RULES ? View.VISIBLE : View.GONE);
+		vVariables.setVisibility(t == SectionType.VARIABLES ? View.VISIBLE : View.GONE);
+		vMessages.setVisibility(t == SectionType.MESSAGES ? View.VISIBLE : View.GONE);
+		vEvents.setVisibility(t == SectionType.EVENTS ? View.VISIBLE : View.GONE);
 	}
 
 	private void setupViewPager() {

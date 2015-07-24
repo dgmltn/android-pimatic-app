@@ -149,4 +149,16 @@ public class Events {
 			this.tab = tab;
 		}
 	}
+
+	public static final class DesiredRules {
+	}
+
+	public static final class DesiredVariables {
+	}
+
+	public static final class DesiredMessages {
+	}
+
+	public static final class DesiredEvents {
+	}
 }

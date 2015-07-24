@@ -29,11 +29,44 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <!-- For devices & device groups -->
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <!-- For rules -->
+        <TextView
+            android:id="@+id/rules"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/Rules"/>
+
+        <!-- For variables -->
+        <TextView
+            android:id="@+id/variables"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/Variables"/>
+
+        <!-- For messages -->
+        <TextView
+            android:id="@+id/messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/Messages"/>
+
+        <!-- For events -->
+        <TextView
+            android:id="@+id/events"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/Events"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

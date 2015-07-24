@@ -136,15 +136,19 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		}
 		else if (menuItem.getItemId() == R.id.rules) {
 			Timber.d("navigation: rules!");
+			Events.post(new Events.DesiredRules());
 		}
 		else if (menuItem.getItemId() == R.id.variables) {
 			Timber.d("navigation: variables!");
+			Events.post(new Events.DesiredVariables());
 		}
 		else if (menuItem.getItemId() == R.id.messages) {
 			Timber.d("navigation: messages!");
+			Events.post(new Events.DesiredMessages());
 		}
 		else if (menuItem.getItemId() == R.id.events) {
 			Timber.d("navigation: events!");
+			Events.post(new Events.DesiredEvents());
 		}
 		else if (menuItem.getItemId() == R.id.connections) {
 			Timber.d("navigation: connections!");
