@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Window / Theme colors -->
     <color name="window_background">#ffffffff</color>
     <color name="primary">#2196f3</color>
     <color name="primary_dark">#1976d2</color>
@@ -7,6 +8,11 @@
     <color name="accent">#ff5722</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
-    <color name="icons">#ffffff</color>
-    <color name="divider">#b6b6b6</color>
+
+    <!-- Message type colors -->
+    <color name="ic_info">#1e88e5</color>
+    <color name="ic_warning">#ffa000</color>
+    <color name="ic_error">#e53935</color>
+    <color name="ic_bug_report">#607d8b</color>
+
 </resources>

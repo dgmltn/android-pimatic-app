@@ -16,11 +16,20 @@
 
 package com.dgmltn.pimatic.ui;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +110,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 		}
 
 		protected void bind(Message message) {
-			time.setText(Long.toString(message.time));
+			CharSequence timeStr = DateUtils.formatSameDayTime(
+				message.time, System.currentTimeMillis(),
+				DateFormat.SHORT, DateFormat.DEFAULT);
+			time.setText(timeStr);
 			if (TextUtils.isEmpty(message.text)) {
 				text.setVisibility(View.GONE);
 			}
@@ -116,13 +128,30 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 				tags.setVisibility(View.VISIBLE);
 				tags.setText(message.tags.get(0));
 			}
-			icon.setImageResource(
-				message.level.equals(Message.INFO) ? R.drawable.ic_info
-					: message.level.equals(Message.ERROR) ? R.drawable.ic_error
-						: message.level.equals(Message.WARN) ? R.drawable.ic_warning
-							: message.level.equals(Message.DEBUG) ? R.drawable.ic_bug_report
-								: 0
-			);
+
+			@DrawableRes int iconRes
+				= message.level.equals(Message.INFO) ? R.drawable.ic_info
+				: message.level.equals(Message.ERROR) ? R.drawable.ic_error
+				: message.level.equals(Message.WARN) ? R.drawable.ic_warning
+				: message.level.equals(Message.DEBUG) ? R.drawable.ic_bug_report
+				: 0;
+
+			if (Build.VERSION.SDK_INT < 21) {
+				Resources res = icon.getContext().getResources();
+				Drawable d = res.getDrawable(iconRes);
+
+				@ColorRes int tint
+					= message.level.equals(Message.INFO) ? R.color.ic_info
+					: message.level.equals(Message.ERROR) ? R.color.ic_error
+					: message.level.equals(Message.WARN) ? R.color.ic_warning
+					: message.level.equals(Message.DEBUG) ? R.color.ic_bug_report
+					: 0;
+				icon.setColorFilter(res.getColor(tint), PorterDuff.Mode.SRC_IN);
+				icon.setImageDrawable(d);
+			}
+			else {
+				icon.setImageResource(iconRes);
+			}
 
 		}
 	}
