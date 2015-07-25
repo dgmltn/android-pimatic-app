@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 		else if (vPager.getVisibility() != View.VISIBLE) {
 			showSection(SectionType.PAGER);
+			vToolbar.setTitle(getString(R.string.app_name));
 		}
 		else {
 			super.onBackPressed();
@@ -140,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
 	@Subscribe
 	public void otto(Events.NetworkChanged e) {
 		setupViewPager();
+		showSection(SectionType.PAGER);
+		vToolbar.setTitle(getString(R.string.app_name));
+		vMessages.getAdapter().clear();
 	}
 
 	@Subscribe
