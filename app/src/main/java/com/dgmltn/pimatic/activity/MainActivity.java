@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dgmltn.pimatic.PimaticApp;
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
@@ -128,13 +129,13 @@ public class MainActivity extends AppCompatActivity {
 			conOpts = ConnectionOptions.fromDemo(this);
 		}
 
-		Model.getInstance().configureNetwork(conOpts);
+		PimaticApp.configureNetwork(conOpts);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Model.getInstance().detachNetwork();
+		PimaticApp.getNetwork().teardown();
 		Events.unregister(this);
 	}
 
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 	public void otto(Events.DesiredMessages e) {
 		showSection(SectionType.MESSAGES);
 		vToolbar.setTitle(getString(R.string.Messages));
-		Model model = Model.getInstance();
+		Model model = PimaticApp.getModel();
 		MessageAdapter adapter = vMessages.getAdapter();
 		adapter.set(model.getMessages());
 	}
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void setupViewPager() {
-		Model model = Model.getInstance();
+		Model model = PimaticApp.getModel();
 
 		GroupPagerAdapter adapter = (GroupPagerAdapter) vPager.getAdapter();
 		if (adapter == null) {
@@ -262,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
 				view = (PageRecyclerView) LayoutInflater
 					.from(container.getContext())
 					.inflate(R.layout.view_page, container, false);
-				view.setPage(Model.getInstance(), p);
+				view.setPage(PimaticApp.getModel(), p);
 				mViews.set(position, view);
 			}
 			container.addView(view, 0);

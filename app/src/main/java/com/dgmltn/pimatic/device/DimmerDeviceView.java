@@ -7,6 +7,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dgmltn.pimatic.PimaticApp;
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
@@ -108,7 +109,7 @@ public class DimmerDeviceView extends DeviceView {
 	}
 
 	private void pushDimlevel(int to) {
-		Model.getInstance().getNetwork().getRest()
+		PimaticApp.getNetwork().getRest()
 			.changeDimlevelTo(device.id, to, new Callback<ActionResponse>() {
 				@Override
 				public void success(ActionResponse actionResponse, Response response) {

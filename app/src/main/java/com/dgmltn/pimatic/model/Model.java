@@ -1,7 +1,5 @@
 package com.dgmltn.pimatic.model;
 
-import com.dgmltn.pimatic.network.ConnectionOptions;
-import com.dgmltn.pimatic.network.Network;
 import com.dgmltn.pimatic.util.Events;
 
 import timber.log.Timber;
@@ -10,52 +8,15 @@ import timber.log.Timber;
  * Created by doug on 6/2/15.
  */
 public class Model {
-	private static Model sInstance = new Model();
 
-	private Model() {
+	public Model() {
 	}
 
-	public static Model getInstance() {
-		return sInstance;
-	}
-
-	///////////////////////////////////////////////////////////////////////////
-	// Network and ConnectionOptions
-	///////////////////////////////////////////////////////////////////////////
-
-	private ConnectionOptions connection;
-	private Network network;
-
-	public void configureNetwork(ConnectionOptions cxn) {
-		if (connection == null || !cxn.equals(connection)) {
-			groups = null;
-			pages = null;
-			devices = null;
-			messages = null;
-			connection = null;
-		}
-		detachNetwork();
-		connection = cxn;
-		getNetwork();
-		Events.post(new Events.NetworkChanged());
-	}
-
-	public void detachNetwork() {
-		if (network != null) {
-			network.teardown();
-			network = null;
-		}
-	}
-
-	public Network getNetwork() {
-		if (network == null && connection != null) {
-			network = new Network(connection);
-		}
-		return network;
-	}
-
-	public ConnectionOptions getConnection() {
-		return connection;
+	public void reset() {
+		groups = null;
+		pages = null;
+		devices = null;
+		messages = null;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

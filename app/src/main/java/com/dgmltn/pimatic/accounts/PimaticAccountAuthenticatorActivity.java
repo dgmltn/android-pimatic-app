@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dgmltn.pimatic.PimaticApp;
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.activity.AppCompatAccountAuthenticatorActivity;
 import com.dgmltn.pimatic.model.LoginResponse;
@@ -204,7 +205,7 @@ public class PimaticAccountAuthenticatorActivity extends AppCompatAccountAuthent
 
 		ConnectionOptions.toSettings(conOps, this);
 		Events.post(new Events.AccountsChanged());
-		Model.getInstance().configureNetwork(conOps);
+		PimaticApp.configureNetwork(conOps);
 
 		setAccountAuthenticatorResult(intent.getExtras());
 		setResult(RESULT_OK, intent);

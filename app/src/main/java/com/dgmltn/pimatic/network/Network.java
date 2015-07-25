@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.dgmltn.pimatic.PimaticApp;
 import com.dgmltn.pimatic.model.DeviceAttributeChange;
 import com.dgmltn.pimatic.model.DevicesResponse;
 import com.dgmltn.pimatic.model.GroupsResponse;
@@ -51,6 +52,10 @@ public class Network {
 		setupWebsocket();
 	}
 
+	public ConnectionOptions getConnection() {
+		return connection;
+	}
+
 	public void teardown() {
 		teardownWebsocket();
 	}
@@ -79,7 +84,7 @@ public class Network {
 				String responseString = args[0].toString();
 				Timber.i("deviceAttributeChanged (" + args.length + " args)" + responseString);
 				DeviceAttributeChange change = new Gson().fromJson(responseString, DeviceAttributeChange.class);
-				Model.getInstance().updateDevice(change);
+				PimaticApp.getModel().updateDevice(change);
 			}
 		});
 
@@ -146,7 +151,7 @@ public class Network {
 			@Override
 			public void success(DevicesResponse devicesResponse, Response response) {
 				Timber.i("devices: " + new Gson().toJson(devicesResponse.devices));
-				Model.getInstance().setDevices(devicesResponse.devices);
+				PimaticApp.getModel().setDevices(devicesResponse.devices);
 			}
 
 			@Override
@@ -163,7 +168,7 @@ public class Network {
 			@Override
 			public void success(PagesResponse pagesResponse, Response response) {
 				Timber.i("pages: " + new Gson().toJson(pagesResponse.pages));
-				Model.getInstance().setPages(pagesResponse.pages);
+				PimaticApp.getModel().setPages(pagesResponse.pages);
 			}
 
 			@Override
@@ -180,7 +185,7 @@ public class Network {
 			@Override
 			public void success(GroupsResponse groupsResponse, Response response) {
 				Timber.i("groups: " + new Gson().toJson(groupsResponse.groups));
-				Model.getInstance().setGroups(groupsResponse.groups);
+				PimaticApp.getModel().setGroups(groupsResponse.groups);
 				downloadPages();
 			}
 
@@ -201,8 +206,8 @@ public class Network {
 			public void success(ConfigResponse pagesAndGroupsResponse, Response response) {
 				Timber.i("pagesAndGroups: pages: " + new Gson().toJson(pagesAndGroupsResponse.config.pages));
 				Timber.i("pagesAndGroups: groups: " + new Gson().toJson(pagesAndGroupsResponse.config.groups));
-				Model.getInstance().setPages(pagesAndGroupsResponse.config.pages);
-				Model.getInstance().setGroups(pagesAndGroupsResponse.config.groups);
+				PimaticApp.getModel().setPages(pagesAndGroupsResponse.config.pages);
+				PimaticApp.getModel().setGroups(pagesAndGroupsResponse.config.groups);
 			}
 
 			@Override
@@ -218,7 +223,7 @@ public class Network {
 			@Override
 			public void success(RulesResponse rulesResponse, Response response) {
 				Timber.i("rules: " + new Gson().toJson(rulesResponse.rules));
-				Model.getInstance().setRules(rulesResponse.rules);
+				PimaticApp.getModel().setRules(rulesResponse.rules);
 			}
 
 			@Override
@@ -234,7 +239,7 @@ public class Network {
 			@Override
 			public void success(VariablesResponse variablesResponse, Response response) {
 				Timber.i("rules: " + new Gson().toJson(variablesResponse.variables));
-				Model.getInstance().setVariables(variablesResponse.variables);
+				PimaticApp.getModel().setVariables(variablesResponse.variables);
 			}
 
 			@Override
@@ -250,7 +255,7 @@ public class Network {
 			@Override
 			public void success(MessagesResponse messagesResponse, Response response) {
 				Timber.i("messages: " + new Gson().toJson(messagesResponse.messages));
-				Model.getInstance().setMessages(messagesResponse.messages);
+				PimaticApp.getModel().setMessages(messagesResponse.messages);
 			}
 
 			@Override

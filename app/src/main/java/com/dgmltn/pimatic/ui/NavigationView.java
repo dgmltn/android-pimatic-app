@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dgmltn.pimatic.PimaticApp;
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.accounts.AccountGeneral;
 import com.dgmltn.pimatic.model.Model;
@@ -109,7 +110,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 				if (account.name.equals(menuItem.getTitle())) {
 					ConnectionOptions conOpts = ConnectionOptions.fromAccount(am, account);
 					ConnectionOptions.toSettings(conOpts, getContext());
-					Model.getInstance().configureNetwork(conOpts);
+					PimaticApp.configureNetwork(conOpts);
 					closeDrawer();
 					break;
 				}
@@ -186,7 +187,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		Menu menu = getMenu();
 		menu.clear();
 
-		vUsername.setText(Model.getInstance().getConnection().getAccountName());
+		vUsername.setText(PimaticApp.getNetwork().getConnection().getAccountName());
 
 		vArrow.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 		if (isDisplayingAccounts && vArrow.getRotationX() != 180f) {
@@ -213,7 +214,7 @@ public class NavigationView extends android.support.design.widget.NavigationView
 		}
 		else {
 			inflateMenu(R.menu.drawer_view);
-			Model model = Model.getInstance();
+			Model model = PimaticApp.getModel();
 			if (model.getPages() != null && model.getDevices() != null) {
 				int i = GROUP_START_ID;
 				for (Page p : model.getPages()) {

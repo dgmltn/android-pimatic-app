@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.dgmltn.pimatic.PimaticApp;
 import com.dgmltn.pimatic.R;
 import com.dgmltn.pimatic.model.ActionResponse;
 import com.dgmltn.pimatic.model.Device;
@@ -97,7 +98,7 @@ public class ButtonsDeviceView extends DeviceView implements View.OnClickListene
 	}
 
 	private void pushButton(String buttonId) {
-		Model.getInstance().getNetwork().getRest()
+		PimaticApp.getNetwork().getRest()
 			.buttonPressed(device.id, buttonId, new Callback<ActionResponse>() {
 				@Override
 				public void success(ActionResponse actionResponse, Response response) {
