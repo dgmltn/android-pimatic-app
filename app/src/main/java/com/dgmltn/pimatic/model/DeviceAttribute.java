@@ -16,4 +16,13 @@ public class DeviceAttribute {
 	public String value;
 	public DeviceAttributeValue[] history;
 	public long lastUpdate;
+
+	public int valueAsInt(int defaultValue) {
+		try {
+			return Integer.parseInt(value);
+		}
+		catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 }

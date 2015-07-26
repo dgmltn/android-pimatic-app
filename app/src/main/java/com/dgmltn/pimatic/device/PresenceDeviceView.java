@@ -86,11 +86,7 @@ public class PresenceDeviceView extends DeviceView {
 	}
 
 	private boolean getDeviceState() {
-		for (DeviceAttribute a : device.attributes) {
-			if (a != null && a.name.equals("presence")) {
-				return a.value.equals("true");
-			}
-		}
-		return false;
+		DeviceAttribute a = device.findAttribute("presence");
+		return a != null && "true".equals(a.value);
 	}
 }

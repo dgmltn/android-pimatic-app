@@ -102,12 +102,8 @@ public class ShutterDeviceView extends DeviceView {
 
 	// Returns "up", "down", "stopped"
 	private String getDeviceState() {
-		for (DeviceAttribute a : device.attributes) {
-			if (a != null && a.name.equals("position")) {
-				return a.value;
-			}
-		}
-		return "stopped";
+		DeviceAttribute a = device.findAttribute("position");
+		return a == null || a.value == null ? "stopped" : a.value;
 	}
 
 	private void doAction(String action) {

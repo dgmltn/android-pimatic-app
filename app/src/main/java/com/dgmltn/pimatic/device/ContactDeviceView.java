@@ -72,15 +72,15 @@ public class ContactDeviceView extends DeviceView {
 	}
 
 	private String getDeviceState() {
-		for (DeviceAttribute a : device.attributes) {
-			if (a != null && a.name.equals("contact")) {
-				if (a.value == null || a.labels == null || a.labels.length < 2) {
-					return "";
-				}
-				int index = a.value.equals("true") ? 0 : 1;
-				return a.labels[index];
-			}
+		DeviceAttribute a = device.findAttribute("contact");
+		if (a == null) {
+			return "";
 		}
-		return "";
+
+		if (a.value == null || a.labels == null || a.labels.length < 2) {
+			return "";
+		}
+		int index = a.value.equals("true") ? 0 : 1;
+		return a.labels[index];
 	}
 }

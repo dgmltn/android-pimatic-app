@@ -118,17 +118,8 @@ public class MediaPlayerDeviceView extends DeviceView {
 	}
 
 	private boolean isPlaying() {
-		DeviceAttribute attr = getDeviceAttribute("state");
+		DeviceAttribute attr = device.findAttribute("state");
 		return attr != null && "playing".equals(attr.value);
-	}
-
-	private DeviceAttribute getDeviceAttribute(String name) {
-		for (DeviceAttribute a : device.attributes) {
-			if (a != null && a.name.equals(name)) {
-				return a;
-			}
-		}
-		return null;
 	}
 
 	private void pushButton(String action) {

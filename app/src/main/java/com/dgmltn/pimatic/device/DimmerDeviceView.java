@@ -100,12 +100,8 @@ public class DimmerDeviceView extends DeviceView {
 	}
 
 	private int getDeviceDimlevel() {
-		for (DeviceAttribute a : device.attributes) {
-			if (a.name.equals("dimlevel")) {
-				return Integer.parseInt(a.value);
-			}
-		}
-		return 0;
+		DeviceAttribute a = device.findAttribute("dimlevel");
+		return a == null ? 0 : a.valueAsInt(0);
 	}
 
 	private void pushDimlevel(int to) {
