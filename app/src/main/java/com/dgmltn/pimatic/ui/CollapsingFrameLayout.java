@@ -55,7 +55,7 @@ public class CollapsingFrameLayout extends FrameLayout {
 		int w = MeasureSpec.getSize(widthMeasureSpec);
 		int h = Math.max(mMinHeight,
 			nameWidth + contWidth < availWidth
-			? nameHeight + getPaddingTop() + getPaddingBottom()
+			? Math.max(nameHeight, contHeight) + getPaddingTop() + getPaddingBottom()
 			: nameHeight + contHeight + getPaddingTop() + getPaddingBottom() + mPaddingSibling
 		);
 
