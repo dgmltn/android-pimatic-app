@@ -15,22 +15,29 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
     android:layout_height="192dp"
     android:background="?attr/colorPrimaryDark"
-    android:padding="8dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:orientation="vertical"
-    android:gravity="bottom">
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_gears"
+        android:scaleType="center"
+        android:tint="?attr/colorPrimary"/>
 
     <LinearLayout
         android:id="@+id/username_arrow_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_gravity="bottom"
         style="@style/Widget.AppCompat.Button.Borderless">
 
         <TextView
@@ -50,4 +57,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>
