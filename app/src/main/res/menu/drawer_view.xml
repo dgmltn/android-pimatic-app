@@ -27,7 +27,7 @@
                 android:title="@string/Rules" />
             <item
                 android:id="@+id/variables"
-                android:icon="@drawable/ic_variables"
+                android:icon="@drawable/ic_code_braces"
                 android:title="@string/Variables" />
         </menu>
     </item>
