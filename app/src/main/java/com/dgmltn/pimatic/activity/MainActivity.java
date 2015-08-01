@@ -282,10 +282,11 @@ public class MainActivity extends AppCompatActivity {
 
 		@Override
 		public boolean isViewFromObject(View view, Object object) {
-			boolean is = object == null || view == null
-				? false
-				: ((Page) object).id.equals(((PageRecyclerView) view).getPage().id);
-			return is;
+			return object != null
+				&& ((Page) object).id != null
+				&& view != null
+				&& ((PageRecyclerView) view).getPage() != null
+				&& ((Page) object).id.equals(((PageRecyclerView) view).getPage().id);
 		}
 
 		@Override
